@@ -10,10 +10,8 @@
     --brand-red: #ff3333;
 
     --bg-dark: #0a0c14;
-    /* Slightly more navy, less pitch black */
     --bg-card: rgba(255, 255, 255, 0.04);
     --bg-glass: transparent;
-    /* Blend header */
     --text-main: #ffffff;
     --text-dim: #94a3b8;
     --primary-glow: rgba(0, 102, 255, 0.5);
@@ -21,6 +19,35 @@
     --header-height: 90px;
     --radius: 20px;
     --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Responsive Spacing & Fonts */
+    --container-padding: 40px;
+    --h1-size: 2.8rem;
+    --subtitle-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-height: 70px;
+        --container-padding: 20px;
+        /* Consistently set to 20px */
+        --h1-size: 1.6rem;
+        --subtitle-size: 0.9rem;
+    }
+
+    .desktop-only {
+        display: none !important;
+    }
+
+    .mobile-hide {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .mobile-only {
+        display: none !important;
+    }
 }
 
 * {
@@ -46,7 +73,7 @@ body {
 .app-container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: calc(var(--header-height) + 40px) 20px 80px;
+    padding: calc(var(--header-height) + 40px) var(--container-padding) 80px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -73,7 +100,6 @@ header-section {
 
 header {
     position: absolute;
-    /* Not fixed to avoid sticking if not needed, or keep fixed but transparent */
     top: 0;
     left: 0;
     right: 0;
@@ -84,6 +110,12 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 60px;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 0 20px;
+    }
 }
 
 .logo-container {
@@ -110,9 +142,30 @@ header {
     text-decoration: none;
 }
 
+@media (max-width: 768px) {
+    .logo {
+        font-size: 1.3rem;
+    }
+
+    .brand-icon {
+        width: 32px;
+        height: 32px;
+    }
+}
+
 nav {
     display: flex;
     gap: 30px;
+}
+
+@media (max-width: 768px) {
+    nav {
+        gap: 15px;
+    }
+
+    nav a {
+        font-size: 0.85rem;
+    }
 }
 
 nav a {
@@ -142,6 +195,13 @@ nav a.active {
     overflow: hidden;
 }
 
+@media (max-width: 768px) {
+    .glass-card {
+        padding: 20px;
+        /* Increased for better breathing room */
+    }
+}
+
 .glass-card::before {
     content: '';
     position: absolute;
@@ -160,15 +220,16 @@ nav a.active {
 }
 
 h1 {
-    font-size: 2.8rem;
+    font-size: var(--h1-size);
     margin-bottom: 15px;
     font-weight: 800;
+    line-height: 1.1;
 }
 
 .subtitle {
     color: var(--text-dim);
     margin-bottom: 40px;
-    font-size: 1.1rem;
+    font-size: var(--subtitle-size);
 }
 
 /* Hero Landing Section */
@@ -207,6 +268,26 @@ h1 {
 .standing-table-container {
     overflow-x: auto;
     margin-top: 20px;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .standing-table-container {
+        overflow-x: hidden;
+        /* Prevent scroll if we fit it */
+    }
+}
+
+/* Custom scrollbar for better feel */
+.standing-table-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.standing-table-container::-webkit-scrollbar-thumb {
+    background: var(--border-glass);
+    border-radius: 4px;
 }
 
 .standing-table {
@@ -231,17 +312,51 @@ h1 {
     font-size: 1rem;
 }
 
+@media (max-width: 768px) {
+    .standing-table td {
+        padding: 14px 6px;
+        /* Increased for better breathing room */
+        font-size: 0.8rem;
+    }
+
+    .standing-table th {
+        padding: 10px 6px;
+        font-size: 0.65rem;
+    }
+}
+
 /* Natural Proportions */
 .num-cell {
-    width: 60px;
+    width: 50px;
     text-align: center;
     font-weight: 500;
     color: var(--text-dim);
 }
 
 .team-cell {
-    min-width: 260px;
+    min-width: 200px;
     text-align: left;
+}
+
+/* Sticky Columns only on Mobile - REMOVED FOR NO-SCROLL FEEL */
+@media (max-width: 768px) {
+    .num-cell {
+        width: 25px;
+    }
+
+    .team-cell {
+        min-width: auto;
+        padding-left: 0 !important;
+    }
+
+    .team-display {
+        gap: 6px;
+    }
+
+    .flag {
+        width: 22px;
+        height: 14px;
+    }
 }
 
 .stat-cell {
@@ -250,11 +365,25 @@ h1 {
     color: var(--text-dim);
 }
 
+@media (max-width: 768px) {
+    .stat-cell {
+        width: 28px;
+        /* Even narrower */
+    }
+}
+
 .pts-cell {
     width: 70px;
     text-align: center;
     font-weight: 800;
     color: var(--brand-blue);
+}
+
+@media (max-width: 768px) {
+    .pts-cell {
+        width: 35px;
+        /* Even narrower */
+    }
 }
 
 .standing-table.mini td {

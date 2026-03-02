@@ -41,6 +41,7 @@
     <script type="module">
         import {
             computeGroupStandings,
+            getTeamCode,
             getTeamFlag,
             getTeamLabel,
             loadTournamentData,
@@ -52,13 +53,16 @@
         function renderTableRows(standings, teams) {
             return standings.map((row, index) => {
                 const flagSrc = getTeamFlag(row.teamId, teams);
+                const teamLabel = getTeamLabel(row.teamId, teams);
+                const teamCode = getTeamCode(row.teamId, teams);
                 return `
                     <tr>
                         <td class="num-cell">${index + 1}</td>
                         <td class="team-cell">
                             <div class="team-display">
                                 ${flagSrc ? `<img class="flag" src="${flagSrc}" alt="">` : `<div class="flag"></div>`}
-                                <span>${getTeamLabel(row.teamId, teams)}</span>
+                                <span class="desktop-only">${teamLabel}</span>
+                                <span class="mobile-only" style="font-weight:800;">${teamCode}</span>
                             </div>
                         </td>
                         <td class="stat-cell">${row.win}</td>
@@ -85,7 +89,7 @@
                         <table class="standing-table">
                             <thead>
                                 <tr>
-                                    <th class="num-cell">순위</th>
+                                    <th class="num-cell"><span class="desktop-only">순위</span><span class="mobile-only">#</span></th>
                                     <th class="team-cell">팀</th>
                                     <th class="stat-cell">승</th>
                                     <th class="stat-cell">무</th>
