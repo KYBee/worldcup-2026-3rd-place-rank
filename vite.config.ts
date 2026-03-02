@@ -10,4 +10,15 @@ export default defineConfig({
       "@data": path.resolve(__dirname, "src/data"),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        simulator: path.resolve(__dirname, "ui/simulator.html"),
+        groups: path.resolve(__dirname, "ui/groups.html"),
+        schedule: path.resolve(__dirname, "ui/schedule.html"),
+        bracket: path.resolve(__dirname, "ui/bracket.html"),
+      },
+    },
+  },
 });
