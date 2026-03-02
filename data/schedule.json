@@ -469,7 +469,7 @@
         {
             "matchId": "J-M5",
             "groupId": "J",
-            "homeTeam": "Jordan",
+            "homeTeam": "Austria",
             "awayTeam": "Argentina",
             "date": "2026-06-27",
             "kickoffUtc": "2026-06-27T18:00:00Z"
@@ -477,8 +477,8 @@
         {
             "matchId": "J-M6",
             "groupId": "J",
-            "homeTeam": "Algeria",
-            "awayTeam": "Albania",
+            "homeTeam": "Jordan",
+            "awayTeam": "Algeria",
             "date": "2026-06-27",
             "kickoffUtc": "2026-06-27T21:00:00Z"
         },

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>킹우의수 | 시뮬레이터</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .simulator-layout {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .standing-section {
+            width: 100%;
+        }
+
+        .summary-empty {
+            color: var(--text-dim);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            padding: 8px 0;
+        }
+
+        .matches-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .group-date-header {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+
+        .score-input-card {
+            display: grid;
+            grid-template-columns: 1fr 180px 1fr;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+        }
+
+        .team-vs {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .team-vs.home {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        .team-vs.away {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .score-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .score-field {
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-glass);
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            transition: var(--transition);
+            /* Hide arrows */
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+
+        .score-field::-webkit-outer-spin-button,
+        .score-field::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .score-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .vs-label {
+            color: var(--text-dim);
+            opacity: 0.3;
+            font-weight: 800;
+            font-size: 0.8rem;
+        }
+
+        .group-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .centered-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 60px 0 100px;
+            width: 100%;
+        }
+
+        .score-warning {
+            color: #ff7777;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .group-selector-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .score-input-card {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .team-vs.home,
+            .team-vs.away {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .team-vs {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="simulator.html" class="logo">킹우의수</a>
+        </div>
+        <nav>
+            <a href="simulator.html" class="active">시뮬레이터</a>
+            <a href="groups.html">조별순위</a>
+            <a href="schedule.html">스케줄</a>
+        </nav>
+    </header>
+
+    <main class="app-container">
+        <!-- Step 1: Landing (Initially Visible) -->
+        <section id="landing-stage" class="hero-landing animate">
+            <h1>월드컵 32강<br><span
+                    style="background: linear-gradient(90deg, #ff3333, #00cc66, #0066ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); font-weight: 900;">경우의
+                    수</span> 계산기</h1>
+            <p class="subtitle">FIFA World Cup 2026 조별리그 결과를 직접 시뮬레이션하고, 어떤 팀들이 32강에 진출할지 확인해보세요.</p>
+            <button class="btn btn-primary" onclick="startSimulator()">시작하기 (Start) ➔</button>
+        </section>
+
+        <!-- Step 2: Simulator (Initially Hidden) -->
+        <section id="simulator-stage" class="hidden animate" style="width: 100%;">
+            <header-section>
+                <h1>시나리오 시뮬레이터</h1>
+                <p class="subtitle">모든 경기의 예상 스코어를 입력하세요. 조 순위가 실시간으로 계산됩니다.</p>
+            </header-section>
+
+            <div class="simulator-layout">
+                <!-- Group Selector -->
+                <div class="group-selector-grid" id="group-nav"></div>
+
+                <!-- Standing Table -->
+                <div class="standing-section">
+                    <div class="glass-card" style="padding: 30px;">
+                        <h2 id="current-group-title" style="margin-bottom: 20px;">A조 실시간 순위</h2>
+                        <div class="standing-table-container">
+                            <table class="standing-table">
+                                <thead>
+                                    <tr>
+                                        <th class="num-cell">순위</th>
+                                        <th class="team-cell">팀</th>
+                                        <th class="stat-cell">승</th>
+                                        <th class="stat-cell">무</th>
+                                        <th class="stat-cell">패</th>
+                                        <th class="pts-cell">점수</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="standing-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match List -->
+                <div class="matches-section" id="match-list"></div>
+            </div>
+
+            <div class="centered-footer">
+                <div id="score-warning" class="score-warning hidden">스코어는 마이너스가 될 수 없습니다.</div>
+                <a href="bracket.html" class="btn btn-primary btn-lg">경우의 수 확정 ➔</a>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import {
+            buildScoresWithDefaultDraw,
+            computeAllGroupStandings,
+            getGroupFixtures,
+            getTeamFlag,
+            getTeamLabel,
+            loadTournamentData,
+            parseInputToScore,
+            readScores,
+            writeScores
+        } from "./app-core.js";
+
+        let data = null;
+        let currentGroup = "A";
+        const scores = readScores();
+        const drafts = {};
+
+        const matchList = document.getElementById("match-list");
+        const standingsBody = document.getElementById("standing-tbody");
+        const scoreWarning = document.getElementById("score-warning");
+
+        function setScoreWarning(visible) {
+            if (!scoreWarning) return;
+            scoreWarning.classList.toggle("hidden", !visible);
+        }
+
+        function getDraftValue(matchId, side) {
+            const draft = drafts[matchId];
+            if (draft && draft[side] !== null && draft[side] !== undefined) return draft[side];
+            const score = scores[matchId];
+            if (score && score[side] !== null && score[side] !== undefined) return score[side];
+            return "";
+        }
+
+        function initGroupNav() {
+            const nav = document.getElementById("group-nav");
+            nav.innerHTML = "";
+            data.groups.forEach((group) => {
+                const btn = document.createElement("button");
+                btn.className = `filter-btn ${group.groupId === currentGroup ? "active" : ""}`;
+                btn.innerText = `${group.groupId}조`;
+                btn.addEventListener("click", () => renderGroup(group.groupId));
+                nav.appendChild(btn);
+            });
+        }
+
+        function updateStoredScore(matchId) {
+            const draft = drafts[matchId];
+            if (!draft || draft.home === null || draft.away === null) {
+                delete scores[matchId];
+                writeScores(scores);
+                return;
+            }
+            scores[matchId] = { home: draft.home, away: draft.away };
+            writeScores(scores);
+        }
+
+        function handleInput(matchId, side, value) {
+            const raw = String(value ?? "").trim();
+            if (raw !== "" && Number(raw) < 0) {
+                if (!drafts[matchId]) drafts[matchId] = { home: null, away: null };
+                drafts[matchId][side] = null;
+                updateStoredScore(matchId);
+                updateComputedViews();
+                setScoreWarning(true);
+                return { rejectedNegative: true };
+            }
+
+            setScoreWarning(false);
+            if (!drafts[matchId]) drafts[matchId] = { home: null, away: null };
+            drafts[matchId][side] = parseInputToScore(value);
+            updateStoredScore(matchId);
+            updateComputedViews();
+            return { rejectedNegative: false };
+        }
+
+        function renderMatches(groupId) {
+            const groupFixtures = getGroupFixtures(data, groupId);
+
+            matchList.innerHTML = "";
+            if (groupFixtures.length === 0) {
+                matchList.innerHTML = `<div class="glass-card summary-empty">표시할 경기가 없습니다.</div>`;
+                return;
+            }
+
+            groupFixtures.forEach((fixture) => {
+                const homeLabel = getTeamLabel(fixture.homeTeamId, data.teams);
+                const awayLabel = getTeamLabel(fixture.awayTeamId, data.teams);
+                const homeFlag = getTeamFlag(fixture.homeTeamId, data.teams);
+                const awayFlag = getTeamFlag(fixture.awayTeamId, data.teams);
+
+                const card = document.createElement("div");
+                card.className = "glass-card score-input-card";
+                card.innerHTML = `
+                    <div style="position: absolute; top: 12px; left: 24px;" class="group-date-header">${fixture.date}</div>
+                    <div class="team-vs home">
+                        <span>${homeLabel}</span>
+                        ${homeFlag ? `<img class="flag" src="${homeFlag}" alt="">` : `<div class="flag"></div>`}
+                    </div>
+                    <div class="score-box">
+                        <input type="number" min="0" class="score-field home-score" value="${getDraftValue(fixture.matchId, "home")}">
+                        <span class="vs-label">VS</span>
+                        <input type="number" min="0" class="score-field away-score" value="${getDraftValue(fixture.matchId, "away")}">
+                    </div>
+                    <div class="team-vs away">
+                        ${awayFlag ? `<img class="flag" src="${awayFlag}" alt="">` : `<div class="flag"></div>`}
+                        <span>${awayLabel}</span>
+                    </div>
+                `;
+
+                const homeInput = card.querySelector(".home-score");
+                const awayInput = card.querySelector(".away-score");
+                homeInput.addEventListener("input", (event) => {
+                    const result = handleInput(fixture.matchId, "home", event.target.value);
+                    if (result.rejectedNegative) event.target.value = "";
+                });
+                awayInput.addEventListener("input", (event) => {
+                    const result = handleInput(fixture.matchId, "away", event.target.value);
+                    if (result.rejectedNegative) event.target.value = "";
+                });
+                matchList.appendChild(card);
+            });
+        }
+
+        function renderStandings(groupRankings) {
+            const current = groupRankings.find((entry) => entry.groupId === currentGroup);
+            const standings = current?.teams || [];
+            standingsBody.innerHTML = standings.map((row, i) => {
+                const flagSrc = getTeamFlag(row.teamId, data.teams);
+                return `
+                    <tr>
+                        <td class="num-cell">${i + 1}</td>
+                        <td class="team-cell">
+                            <div class="team-display">
+                                ${flagSrc ? `<img class="flag" src="${flagSrc}" alt="">` : `<div class="flag"></div>`}
+                                <span>${getTeamLabel(row.teamId, data.teams)}</span>
+                            </div>
+                        </td>
+                        <td class="stat-cell">${row.win}</td>
+                        <td class="stat-cell">${row.draw}</td>
+                        <td class="stat-cell">${row.loss}</td>
+                        <td class="pts-cell">${row.pts}</td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        function updateComputedViews() {
+            const effectiveScores = buildScoresWithDefaultDraw(data, scores);
+            const groupRankings = computeAllGroupStandings(data, effectiveScores);
+            renderStandings(groupRankings);
+        }
+
+        function renderGroup(groupId) {
+            currentGroup = groupId;
+            document.getElementById("current-group-title").innerText = `${groupId}조 실시간 순위`;
+            initGroupNav();
+            renderMatches(groupId);
+            updateComputedViews();
+        }
+
+        async function startSimulator() {
+            if (!data) {
+                data = await loadTournamentData();
+            }
+            document.getElementById("landing-stage").classList.add("hidden");
+            document.getElementById("simulator-stage").classList.remove("hidden");
+
+            currentGroup = data.groups[0]?.groupId || "A";
+            initGroupNav();
+            renderGroup(currentGroup);
+        }
+
+        window.startSimulator = () => {
+            startSimulator().catch((error) => {
+                alert(`시뮬레이터 로딩 실패: ${error.message}`);
+            });
+        };
+    </script>
+</body>
+
+</html>
