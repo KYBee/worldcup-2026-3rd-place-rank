@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>킹우의수 | 조별순위</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .group-card {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="simulator.html" class="logo">킹우의수</a>
+        </div>
+        <nav>
+            <a href="simulator.html">시뮬레이터</a>
+            <a href="groups.html" class="active">조별순위</a>
+            <a href="schedule.html">스케줄</a>
+        </nav>
+    </header>
+
+    <main class="app-container">
+        <header-section class="animate">
+            <h1>조별 순위표</h1>
+            <p class="subtitle">모든 조별리그 실시간 순위를 한눈에 확인하세요.</p>
+        </header-section>
+
+        <div id="groups-container" class="animate delay-1">
+            <!-- All group cards rendered here -->
+        </div>
+    </main>
+
+    <script type="module">
+        import {
+            computeGroupStandings,
+            getTeamFlag,
+            getTeamLabel,
+            loadTournamentData,
+            readOfficialScores
+        } from "./app-core.js";
+
+        const container = document.getElementById("groups-container");
+
+        function renderTableRows(standings, teams) {
+            return standings.map((row, index) => {
+                const flagSrc = getTeamFlag(row.teamId, teams);
+                return `
+                    <tr>
+                        <td class="num-cell">${index + 1}</td>
+                        <td class="team-cell">
+                            <div class="team-display">
+                                ${flagSrc ? `<img class="flag" src="${flagSrc}" alt="">` : `<div class="flag"></div>`}
+                                <span>${getTeamLabel(row.teamId, teams)}</span>
+                            </div>
+                        </td>
+                        <td class="stat-cell">${row.win}</td>
+                        <td class="stat-cell">${row.draw}</td>
+                        <td class="stat-cell">${row.loss}</td>
+                        <td class="stat-cell">${row.gf}</td>
+                        <td class="stat-cell">${row.ga}</td>
+                        <td class="stat-cell">${row.gd}</td>
+                        <td class="pts-cell">${row.pts}</td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        function renderGroups(data, scores) {
+            container.innerHTML = "";
+            data.groups.forEach((group) => {
+                const standings = computeGroupStandings(data, group.groupId, scores);
+                const card = document.createElement("div");
+                card.className = "glass-card group-card";
+                card.innerHTML = `
+                    <div class="group-title" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 25px;">${group.groupId}조 순위</div>
+                    <div class="standing-table-container">
+                        <table class="standing-table">
+                            <thead>
+                                <tr>
+                                    <th class="num-cell">순위</th>
+                                    <th class="team-cell">팀</th>
+                                    <th class="stat-cell">승</th>
+                                    <th class="stat-cell">무</th>
+                                    <th class="stat-cell">패</th>
+                                    <th class="stat-cell">득</th>
+                                    <th class="stat-cell">실</th>
+                                    <th class="stat-cell">차</th>
+                                    <th class="pts-cell">점수</th>
+                                </tr>
+                            </thead>
+                            <tbody>${renderTableRows(standings, data.teams)}</tbody>
+                        </table>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function init() {
+            try {
+                container.innerHTML = '<div style="text-align:center; opacity:0.7; padding:40px 0;">데이터를 불러오는 중...</div>';
+                const data = await loadTournamentData();
+                const scores = readOfficialScores(data);
+                renderGroups(data, scores);
+            } catch (error) {
+                container.innerHTML = `<div style="text-align:center; color:#ff7777; padding:40px 0;">로딩 실패: ${error.message}</div>`;
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
