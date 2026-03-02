@@ -23,17 +23,11 @@
 
 ## UI 미리보기
 
-### 시뮬레이터
-![시뮬레이터](assets/screenshots/simulator.png)
+### 조별 순위
+![조별 순위](assets/screenshots/groups.png)
 
 ### 시뮬레이션 진행 화면
 ![시뮬레이션 진행](assets/screenshots/simulator-running.png)
 
-### 조별 순위
-![조별 순위](assets/screenshots/groups.png)
-
-### 스케줄
-![스케줄](assets/screenshots/schedule.png)
-
-### 32강 대진
-![브래킷](assets/screenshots/bracket.png)
+### 최종 결과 화면
+![최종 결과](assets/screenshots/final-reference.png)
