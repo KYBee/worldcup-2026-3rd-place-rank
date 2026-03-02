@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>킹우의수</title>
+</head>
+
+<body>
+  <script>
+    (function routeToUiExample() {
+      const path = window.location.pathname.replace(/\/+$/, "") || "/";
+
+      const routeMap = {
+        "/": "/ui/simulator.html",
+        "/simulator": "/ui/simulator.html",
+        "/groups": "/ui/groups.html",
+        "/schedule": "/ui/schedule.html",
+        "/bracket": "/ui/bracket.html"
+      };
+
+      const target = routeMap[path] || "/ui/simulator.html";
+      if (window.location.pathname + window.location.search + window.location.hash !== target) {
+        window.location.replace(target);
+      }
+    })();
+  </script>
+</body>
+
+</html>
