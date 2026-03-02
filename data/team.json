@@ -1,0 +1,284 @@
+{
+    "mexico": {
+        "en": "Mexico",
+        "ko": "멕시코",
+        "flag": "data/flags/Mexico.png",
+        "fifaRanking": 15
+    },
+    "south_africa": {
+        "en": "South Africa",
+        "ko": "남아프리카공화국",
+        "flag": "data/flags/South_Africa.png",
+        "fifaRanking": 61
+    },
+    "south_korea": {
+        "en": "South Korea",
+        "ko": "대한민국",
+        "flag": "data/flags/South_Korea.png",
+        "fifaRanking": 22
+    },
+    "european_playoff_a": {
+        "en": "European Playoff A",
+        "ko": "유럽 플레이오프 A",
+        "fifaRanking": 60
+    },
+    "european_playoff_b": {
+        "en": "European Playoff B",
+        "ko": "유럽 플레이오프 B",
+        "fifaRanking": 60
+    },
+    "european_playoff_c": {
+        "en": "European Playoff C",
+        "ko": "유럽 플레이오프 C",
+        "fifaRanking": 60
+    },
+    "european_playoff_d": {
+        "en": "European Playoff D",
+        "ko": "유럽 플레이오프 D",
+        "fifaRanking": 60
+    },
+    "canada": {
+        "en": "Canada",
+        "ko": "캐나다",
+        "flag": "data/flags/Canada.png",
+        "fifaRanking": 29
+    },
+    "qatar": {
+        "en": "Qatar",
+        "ko": "카타르",
+        "flag": "data/flags/Qatar.png",
+        "fifaRanking": 61
+    },
+    "switzerland": {
+        "en": "Switzerland",
+        "ko": "스위스",
+        "flag": "data/flags/Switzerland.png",
+        "fifaRanking": 17
+    },
+    "brazil": {
+        "en": "Brazil",
+        "ko": "브라질",
+        "flag": "data/flags/Brazil.png",
+        "fifaRanking": 5
+    },
+    "morocco": {
+        "en": "Morocco",
+        "ko": "모로코",
+        "flag": "data/flags/Morocco.png",
+        "fifaRanking": 8
+    },
+    "haiti": {
+        "en": "Haiti",
+        "ko": "아이티",
+        "flag": "data/flags/Haiti.png",
+        "fifaRanking": 84
+    },
+    "scotland": {
+        "en": "Scotland",
+        "ko": "스코틀랜드",
+        "flag": "data/flags/Scotland.png",
+        "fifaRanking": 38
+    },
+    "united_states": {
+        "en": "United States",
+        "ko": "미국",
+        "flag": "data/flags/United_States.png",
+        "fifaRanking": 14
+    },
+    "paraguay": {
+        "en": "Paraguay",
+        "ko": "파라과이",
+        "flag": "data/flags/Paraguay.png",
+        "fifaRanking": 39
+    },
+    "australia": {
+        "en": "Australia",
+        "ko": "호주",
+        "flag": "data/flags/Australia.png",
+        "fifaRanking": 27
+    },
+    "germany": {
+        "en": "Germany",
+        "ko": "독일",
+        "flag": "data/flags/Germany.png",
+        "fifaRanking": 10
+    },
+    "ecuador": {
+        "en": "Ecuador",
+        "ko": "에콰도르",
+        "flag": "data/flags/Ecuador.png",
+        "fifaRanking": 23
+    },
+    "cote_divoire": {
+        "en": "Côte d'Ivoire",
+        "ko": "코트디부아르",
+        "flag": "data/flags/Ivory_Coast.png",
+        "fifaRanking": 42
+    },
+    "curacao": {
+        "en": "Curaçao",
+        "ko": "퀴라소",
+        "flag": "data/flags/Curacao.png",
+        "fifaRanking": 82
+    },
+    "netherlands": {
+        "en": "Netherlands",
+        "ko": "네덜란드",
+        "flag": "data/flags/Netherlands.png",
+        "fifaRanking": 7
+    },
+    "japan": {
+        "en": "Japan",
+        "ko": "일본",
+        "flag": "data/flags/Japan.png",
+        "fifaRanking": 19
+    },
+    "tunisia": {
+        "en": "Tunisia",
+        "ko": "튀니지",
+        "flag": "data/flags/Tunisia.png",
+        "fifaRanking": 40
+    },
+    "belgium": {
+        "en": "Belgium",
+        "ko": "벨기에",
+        "flag": "data/flags/Belgium.png",
+        "fifaRanking": 9
+    },
+    "egypt": {
+        "en": "Egypt",
+        "ko": "이집트",
+        "flag": "data/flags/Egypt.png",
+        "fifaRanking": 31
+    },
+    "iran": {
+        "en": "Iran",
+        "ko": "이란",
+        "flag": "data/flags/Iran.png",
+        "fifaRanking": 20
+    },
+    "new_zealand": {
+        "en": "New Zealand",
+        "ko": "뉴질랜드",
+        "flag": "data/flags/New_Zealand.png",
+        "fifaRanking": 86
+    },
+    "spain": {
+        "en": "Spain",
+        "ko": "스페인",
+        "flag": "data/flags/Spain.png",
+        "fifaRanking": 1
+    },
+    "uruguay": {
+        "en": "Uruguay",
+        "ko": "우루과이",
+        "flag": "data/flags/Uruguay.png",
+        "fifaRanking": 16
+    },
+    "saudi_arabia": {
+        "en": "Saudi Arabia",
+        "ko": "사우디아라비아",
+        "flag": "data/flags/Saudi_Arabia.png",
+        "fifaRanking": 60
+    },
+    "cape_verde": {
+        "en": "Cape Verde",
+        "ko": "카보베르데",
+        "flag": "data/flags/Cabo_Verde.png",
+        "fifaRanking": 68
+    },
+    "france": {
+        "en": "France",
+        "ko": "프랑스",
+        "flag": "data/flags/France.png",
+        "fifaRanking": 3
+    },
+    "senegal": {
+        "en": "Senegal",
+        "ko": "세네갈",
+        "flag": "data/flags/Senegal.png",
+        "fifaRanking": 12
+    },
+    "norway": {
+        "en": "Norway",
+        "ko": "노르웨이",
+        "flag": "data/flags/Norway.png",
+        "fifaRanking": 32
+    },
+    "intercontinental_playoff_1": {
+        "en": "Intercontinental Playoff 1",
+        "ko": "대륙간 플레이오프 1",
+        "fifaRanking": 60
+    },
+    "intercontinental_playoff_2": {
+        "en": "Intercontinental Playoff 2",
+        "ko": "대륙간 플레이오프 2",
+        "fifaRanking": 60
+    },
+    "argentina": {
+        "en": "Argentina",
+        "ko": "아르헨티나",
+        "flag": "data/flags/Argentina.png",
+        "fifaRanking": 2
+    },
+    "algeria": {
+        "en": "Algeria",
+        "ko": "알제리",
+        "flag": "data/flags/Algeria.png",
+        "fifaRanking": 35
+    },
+    "austria": {
+        "en": "Austria",
+        "ko": "오스트리아",
+        "flag": "data/flags/Austria.png",
+        "fifaRanking": 24
+    },
+    "jordan": {
+        "en": "Jordan",
+        "ko": "요르단",
+        "flag": "data/flags/Jordan.png",
+        "fifaRanking": 66
+    },
+    "portugal": {
+        "en": "Portugal",
+        "ko": "포르투갈",
+        "flag": "data/flags/Portugal.png",
+        "fifaRanking": 6
+    },
+    "colombia": {
+        "en": "Colombia",
+        "ko": "콜롬비아",
+        "flag": "data/flags/Colombia.png",
+        "fifaRanking": 14
+    },
+    "uzbekistan": {
+        "en": "Uzbekistan",
+        "ko": "우즈베키스탄",
+        "flag": "data/flags/Uzbekistan.png",
+        "fifaRanking": 60
+    },
+    "england": {
+        "en": "England",
+        "ko": "잉글랜드",
+        "flag": "data/flags/England.png",
+        "fifaRanking": 4
+    },
+    "croatia": {
+        "en": "Croatia",
+        "ko": "크로아티아",
+        "flag": "data/flags/Croatia.png",
+        "fifaRanking": 11
+    },
+    "ghana": {
+        "en": "Ghana",
+        "ko": "가나",
+        "flag": "data/flags/Ghana.png",
+        "fifaRanking": 72
+    },
+    "panama": {
+        "en": "Panama",
+        "ko": "파나마",
+        "flag": "data/flags/Panama.png",
+        "fifaRanking": 33
+    }
+}

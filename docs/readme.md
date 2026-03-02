@@ -1,100 +1,291 @@
-# 3rdPlace Lab — Data Pack (샘플) & MVP 화면 정의
-
-이 폴더는 **3rdPlace Lab**의 무서버/정적 호스팅 아키텍처를 전제로 한 **데이터팩(Data Pack) 샘플**입니다.  
-현재 포함된 팀/조/일정은 **placeholder(가짜 데이터)** 이며, 실제 2026 월드컵 공식 데이터(48팀/조 편성/경기 일정)가 확보되면 교체하는 구조입니다.
+## FIFA World Cup 2026 Simulation & Knockout Bracket Generator
 
 ---
 
-## 1) MVP에서 “반드시 있는” 화면(웹)
+## 📌 1. 프로젝트 개요
 
-아래 4개 화면이 **최소 제품(MVP)** 기준 핵심 화면입니다.
+이 웹앱은 다음을 자동으로 처리합니다:
 
-### A. 조별 구성 보기 (Groups View)
-- 각 조(A~L)의 **팀 구성**을 한눈에 보여줍니다.
-- 팀명/국기(에셋) 표시
-- 조 클릭 시 해당 조 상세(팀 4개 + 그 조 경기들로 이동)
-
-> 이 화면은 `tournament.json`의 `groups[]`, `teams{}`만으로 구성됩니다.
-
-### B. 경기 일정 보기 (Schedule View)
-- 조별리그 **전체 경기 목록(72경기)**를 날짜/시간 기준으로 보여줍니다.
-- 필터: 날짜, 조(A~L), 팀 검색
-- 각 경기의 킥오프 시간(`kickoffUtc`)과 장소(`venue`)는 **있으면 표시**, 없으면 숨김/대체 문구.
-
-> 이 화면은 `tournament.json`의 `matches[]`(특히 `kickoffUtc`, `venue`)를 사용합니다.  
-> ※ MVP에서는 스크래핑보다 “데이터팩 JSON 업데이트(커밋/배포)” 방식이 안정적입니다.
-
-### C. 스코어 입력(시뮬레이터) (Simulator View)
-- 경우의 수 입력기: 유저가 **조별로 경기 스코어를 입력**합니다.
-- 기본 상태(대회 시작 전): 모든 경기는 입력 가능(locked 없음)
-- 대회 진행 중: `official_results.json`에 `final`로 들어간 경기는 기본 잠금(Override 토글로만 변경 가능)
-
-> 사용자는 여기서 입력한 결과로 **조 순위 + 3위 12팀 랭킹 + 32강**을 즉시 계산합니다.
-
-### D. 32강 브래킷 보기 (Round of 32 View)
-- 최종 목표 화면: 32강 매치업을 보여줍니다.
-- 각 매치 카드에 **2단계 표기**를 권장합니다.
-  1) UNRESOLVED (placeholder): “1A vs Best 3rd (C/E/F/H/I)” 같은 슬롯 라벨
-  2) RESOLVED (scenario): 시나리오가 완성되면 “Mexico(1A) vs Japan(3E)”처럼 팀명으로 확정 표시
-- 내보내기:
-  - **Download PNG** (커뮤니티 공유용)
-  - **Print / Save as PDF** (문서/저장용)
-
-> 32강 매핑은 `annexC.json`(Annex C lookup table)을 통해 결정됩니다.
+✔ 조별 리그 순위 계산
+✔ 동률 시 FIFA 공식 타이브레이커 적용 (FIFA Ranking 포함) ([위키백과][1])
+✔ 경기 검색(영문/한글, 부분 일치)
+✔ 32강 대진 자동 생성
+✔ 16강, 8강 이후 자동 전진
 
 ---
 
-## 2) “처음에는 다 0”에 대한 처리 원칙
+## 📂 2. 데이터 구조
 
-- UI 입력칸에는 `0 - 0`처럼 기본값이 보일 수 있지만,
-- 계산 로직에서 **“미입력 경기(null)”** 과 **“0-0 무승부 확정”**는 완전히 다릅니다.
+### teams.json
 
-권장 구현:
-- 내부적으로는 결과를 기본 `null`로 두고,
-- 사용자가 저장/적용하는 순간에만 `{home:0, away:0}` 같은 스코어가 결과로 기록되도록 합니다.
+모든 팀에 대해 아래 구조로 정의합니다:
 
----
+```json
+{
+  "<team_id>": {
+    "en": "<English Name>",
+    "ko": "<Korean Name>",
+    "flag": "data/flags/<Flag Image File>",
+    "fifaRanking": <number>
+  }
+}
+```
 
-## 3) 포함 파일
-
-### `tournaments/fwc-2026/tournament.json`
-- (샘플) 48팀(placeholder) / 12개 조(A~L) / 조별 72경기 정의
-- 실제 운영 시, 여기에 **공식 팀/조/일정(날짜/시간 포함)**을 반영합니다.
-
-### `tournaments/fwc-2026/official_results.json`
-- (기본) `{}` 빈 파일 = “대회 시작 전” 상태
-- 대회 진행 중에는, 끝난 경기만 `final`로 채워서 **잠금/고정 결과**로 사용합니다.
-
-### `tournaments/fwc-2026/official_results.example.json`
-- 스키마 예시(잠금 경기 1개 포함)
-
-### `tournaments/fwc-2026/annexC.sample.json`
-- **SAMPLE ONLY — 실제 FIFA Annex C가 아닙니다.**
-- 파이프라인(키 생성 → 슬롯 매핑 → 브래킷 반영) 연결을 위한 더미 데이터입니다.
-- 실제 서비스에서는 FIFA 규정의 Annex C 표를 추출해 `annexC.json`으로 교체합니다.
-
-### `src/core/types.ts`
-- UI/로직 분리를 위한 핵심 TypeScript 타입 모음
+* FIFA 랭킹은 **2025년 최신 랭킹 기준**
+* 플레이오프 및 placeholder 팀은 모두 `60`으로 통일
 
 ---
 
-## 4) Match ID 규칙(샘플)
+### group.json
 
-이 샘플은 matchId를 다음과 같이 부여합니다:
-
-- `A-M1..A-M6` (Group A 6경기)
-- ...
-- `L-M1..L-M6` (Group L 6경기)
-
-> 실제 데이터팩에서도 **matchId는 절대 바뀌지 않는 키**로 유지하는 것을 강력 추천합니다.  
-> (official 결과/시나리오 저장/URL 공유가 모두 matchId를 키로 삼기 때문)
+```json
+{
+  "groups": [
+    {
+      "groupId": "A",
+      "teams": ["mexico", "south_korea", "south_africa", "european_playoff_d"]
+    }
+  ]
+}
+```
 
 ---
 
-## 5) Export-to-image(PNG) 주의사항
+### schedule.json
 
-브래킷을 DOM → PNG로 내보낼 때, 국기/로고 같은 이미지가 외부 도메인(CORS 미허용)에서 로드되면
-캔버스가 “tainted”되어 내보내기가 실패할 수 있습니다.
+```json
+{
+  "fixtures": [
+    {
+      "matchId": "A-01",
+      "groupId": "A",
+      "home": "mexico",
+      "away": "south_africa",
+      "kickoffUtc": "2026-06-11T18:00:00Z"
+    }
+  ]
+}
+```
 
-권장:
-- 가능하면 국기/로고 에셋을 **같은 도메인에서 서빙(프로젝트 빌드에 포함)**하세요.
+---
+
+## 🔍 3. 검색 기능
+
+### 요구사항
+
+* 영어/한글 검색 지원
+* 부분 일치 필터링
+* Schedule & Simulator 페이지 모두 적용
+
+### 구현 예
+
+```js
+function filterMatches(keyword) {
+  const term = keyword.trim().toLowerCase();
+  return schedule.fixtures.filter(m => {
+    const home = teams[m.home].en.toLowerCase() + teams[m.home].ko.toLowerCase();
+    const away = teams[m.away].en.toLowerCase() + teams[m.away].ko.toLowerCase();
+    return home.includes(term) || away.includes(term);
+  });
+}
+```
+
+---
+
+## 📊 4. 조별 순위 계산 알고리즘
+
+### 📌 순위 결정 기준 (FIFA 공식)
+
+1. Head-to-head points
+2. Head-to-head goal difference
+3. Head-to-head goals scored
+4. Overall goal difference
+5. Overall goals scored
+6. FIFA World Ranking ([위키백과][1])
+
+> 페어플레이는 이번 프로젝트에서는 고려하지 않음.
+
+---
+
+### 🧠 기본 데이터 모델
+
+```js
+teamStats = {
+  points: 0,
+  goalDiff: 0,
+  goalsFor: 0,
+  goalsAgainst: 0,
+  headToHead: {} // 상대별 통계
+};
+```
+
+---
+
+### 🎯 정렬/비교 함수
+
+```js
+function compareHeadToHead(a, b) {
+  const h2hA = a.headToHead[b.id] || { points: 0, goalDiff: 0, goalsFor: 0 };
+  const h2hB = b.headToHead[a.id] || { points: 0, goalDiff: 0, goalsFor: 0 };
+
+  if (h2hA.points !== h2hB.points) return h2hB.points - h2hA.points;
+  if (h2hA.goalDiff !== h2hB.goalDiff) return h2hB.goalDiff - h2hA.goalDiff;
+  if (h2hA.goalsFor !== h2hB.goalsFor) return h2hB.goalsFor - h2hA.goalsFor;
+  return null;
+}
+
+function sortGroupTeams(teams) {
+  return teams.sort((a, b) => {
+    if (a.points !== b.points) return b.points - a.points;
+
+    const h2h = compareHeadToHead(a, b);
+    if (h2h !== null) return h2h;
+
+    if (a.goalDiff !== b.goalDiff) return b.goalDiff - a.goalDiff;
+    if (a.goalsFor !== b.goalsFor) return b.goalsFor - a.goalsFor;
+
+    return a.fifaRanking - b.fifaRanking; 
+  });
+}
+```
+
+---
+
+## 🥉 5. 상위 8개 3위 비교
+
+32강에는 다음이 진출합니다:
+✔ All group winners (12)
+✔ All runners-up (12)
+✔ Top 8 ranked 3rd place teams
+
+### 비교 기준
+
+1. Points
+2. Goal difference
+3. Goals scored
+4. FIFA ranking
+
+```js
+function rankThirdPlace(teams3) {
+  return teams3.sort((a, b) => {
+    if (a.points !== b.points) return b.points - a.points;
+    if (a.goalDiff !== b.goalDiff) return b.goalDiff - a.goalDiff;
+    if (a.goalsFor !== b.goalsFor) return b.goalsFor - a.goalsFor;
+    return a.fifaRanking - b.fifaRanking;
+  });
+}
+```
+
+---
+
+## 🏆 6. 32강 자동 대진 배치
+
+### 📌 Slot System 구조
+
+FIFA 공식 32강 매치업은 **고정된 슬롯 구조**로 주어져 있으며,
+8개의 3위 팀은 *허용된 그룹 범위* 안에서 해당 슬롯에 배치됩니다. ([위키백과][2])
+
+예:
+
+| Slot                            | Matchup                                |
+| ------------------------------- | -------------------------------------- |
+| M73                             | Runner-up Group A vs Runner-up Group B |
+| M74                             | Winner Group C vs Runner-up Group F    |
+| M75                             | Winner Group E vs 3rd from (A/B/C/D/F) |
+| ...                             | Others similar (Wikipedia format)      |
+| (*전 매치업 목록은 전체 공식 bracket을 참고*) |                                        |
+
+---
+
+### 🎯 슬롯 JSON 예시
+
+```json
+{
+  "M75": {
+    "home": { "type": "winner", "group": "E" },
+    "away": { "type": "thirdBest", "groupsAllowed": ["A","B","C","D","F"] }
+  },
+  ...
+}
+```
+
+---
+
+### 🧠 자동 매핑 함수
+
+```js
+function assignThirdPlace(cfg, bestThirds) {
+  const candidate = bestThirds.find(t => cfg.groupsAllowed.includes(t.groupId));
+  return candidate || null;
+}
+
+function generateRoundOf32(groups, bestThirds) {
+  const bracket = {};
+  for (const slot in round32Config) {
+    const cfg = round32Config[slot];
+    if (cfg.home.type === "winner") bracket[slot] = { home: groups[cfg.home.group].top1 };
+    if (cfg.home.type === "runnerUp") bracket[slot].home = groups[cfg.home.group].top2;
+
+    if (cfg.away.type === "thirdBest") {
+      bracket[slot].away = assignThirdPlace(cfg.away, bestThirds);
+    }
+  }
+  return bracket;
+}
+```
+
+---
+
+## 🏁 7. 16강 이후 자동 전진
+
+32강 승자는 아래처럼 슬롯 ID로 자동 배정됩니다:
+
+```
+M89: Winner M73 vs Winner M75
+M90: Winner M74 vs Winner M77
+...
+```
+
+이런 구조는 **정적 JSON 기반으로 브래킷 룰을 미리 정의해두고**
+다음 라운드는 이전 라운드 matchId 승자끼리 자동 생성하게 됩니다. ([위키백과][2])
+
+---
+
+## ⚙ 8. 개발 우선순위
+
+### Must-have
+
+1. Group ranking engine
+2. Simulator score update → real-time ranking
+3. Search filter UI
+4. Round of 32 generator
+5. Bracket viewer UI
+
+### Optional
+
+✔ Multi-language support (ko/en)
+✔ LocalStorage sync
+✔ Shareable links
+
+---
+
+## 📝 참고 규정
+
+### Group Tie-breakers
+
+순위는 다음 순서로 결정됩니다:
+
+1. Head-to-head points
+2. Head-to-head goal diff
+3. Head-to-head goals for
+4. Overall goal diff
+5. Overall goals for
+6. Fair play (optional)
+7. FIFA Rank ([위키백과][1])
+
+---
+
+## 📌 결과
+
+이 README는 **정량적 계산 + 공식 FIFA 브래킷 구조**를 모두 담고 있으며,
+실제로 개발하면서 바로 구현 가능한 코드 틀을 포함하고 있습니다.

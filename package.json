@@ -1,0 +1,13 @@
+{
+  "name": "3rd-place-calculator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "status": "node scripts/status.mjs",
+    "status:check": "node scripts/status.mjs --check",
+    "verify": "node scripts/verify.mjs",
+    "verify:check": "node scripts/verify.mjs --check",
+    "gate": "npm run status:check && npm run verify:check"
+  }
+}
