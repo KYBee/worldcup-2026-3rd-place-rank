@@ -2,6 +2,8 @@
 
 월드컵 조별리그 결과를 직접 입력하고, 어떤 팀들이 32강에 올라가는지 바로 확인할 수 있는 서비스입니다.
 
+- GitHub: https://github.com/KYBee/worldcup-2026-3rd-place-rank
+
 ## 이 서비스로 할 수 있는 것
 - 경기 점수를 입력해서 조별 순위를 실시간으로 확인하기
 - 3위 팀들 중 누가 올라가는지 한눈에 보기
@@ -23,6 +25,9 @@
 
 ### 시뮬레이터
 ![시뮬레이터](assets/screenshots/simulator.png)
+
+### 시뮬레이션 진행 화면
+![시뮬레이션 진행](assets/screenshots/simulator-running.png)
 
 ### 조별 순위
 ![조별 순위](assets/screenshots/groups.png)
