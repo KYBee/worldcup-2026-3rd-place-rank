@@ -143,24 +143,70 @@
         @media (max-width: 768px) {
             .group-selector-grid {
                 grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
             }
 
             .score-input-card {
-                grid-template-columns: 1fr;
-                gap: 15px;
-                text-align: center;
-                padding: 20px;
+                grid-template-columns: 1fr 100px 1fr;
+                /* Horizontal flow */
+                gap: 12px;
+                /* Increased from 5px for better breathing room */
+                padding: 38px 10px 18px;
+                /* Increased top padding for breathing room */
+                align-items: center;
+                position: relative;
             }
 
-            .team-vs.home,
+            .group-date-header {
+                position: absolute;
+                top: 12px;
+                left: 20px;
+                font-size: 0.8rem;
+                margin-bottom: 0;
+            }
+
+            .team-vs.home {
+                justify-content: flex-end;
+                text-align: right;
+            }
+
             .team-vs.away {
-                justify-content: center;
-                text-align: center;
+                justify-content: flex-start;
+                text-align: left;
             }
 
             .team-vs {
-                font-size: 1rem;
+                font-size: 0.85rem;
+                /* Slightly smaller */
+                gap: 6px;
             }
+
+            .score-field {
+                width: 40px;
+                /* Slightly smaller */
+                height: 40px;
+                font-size: 1.1rem;
+                /* Slightly smaller */
+                border-radius: 8px;
+            }
+
+            .score-box {
+                gap: 6px;
+            }
+
+            .vs-label {
+                font-size: 0.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .group-selector-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .team-vs {
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -206,11 +252,15 @@
                             <table class="standing-table">
                                 <thead>
                                     <tr>
-                                        <th class="num-cell">순위</th>
+                                        <th class="num-cell"><span class="desktop-only">순위</span><span
+                                                class="mobile-only">#</span></th>
                                         <th class="team-cell">팀</th>
                                         <th class="stat-cell">승</th>
                                         <th class="stat-cell">무</th>
                                         <th class="stat-cell">패</th>
+                                        <th class="stat-cell">득</th>
+                                        <th class="stat-cell">실</th>
+                                        <th class="stat-cell">차</th>
                                         <th class="pts-cell">점수</th>
                                     </tr>
                                 </thead>
@@ -235,11 +285,16 @@
         import {
             buildScoresWithDefaultDraw,
             computeAllGroupStandings,
+            computeGroupStandings,
+            generateRoundOf32,
             getGroupFixtures,
+            getTeamCode,
             getTeamFlag,
             getTeamLabel,
             loadTournamentData,
             parseInputToScore,
+            pickTopEightThirdPlace,
+            rankThirdPlaceTeams,
             readScores,
             writeScores
         } from "./app-core.js";
@@ -320,27 +375,31 @@
             groupFixtures.forEach((fixture) => {
                 const homeLabel = getTeamLabel(fixture.homeTeamId, data.teams);
                 const awayLabel = getTeamLabel(fixture.awayTeamId, data.teams);
+                const homeCode = getTeamCode(fixture.homeTeamId, data.teams);
+                const awayCode = getTeamCode(fixture.awayTeamId, data.teams);
                 const homeFlag = getTeamFlag(fixture.homeTeamId, data.teams);
                 const awayFlag = getTeamFlag(fixture.awayTeamId, data.teams);
 
                 const card = document.createElement("div");
                 card.className = "glass-card score-input-card";
                 card.innerHTML = `
-                    <div style="position: absolute; top: 12px; left: 24px;" class="group-date-header">${fixture.date}</div>
-                    <div class="team-vs home">
-                        <span>${homeLabel}</span>
-                        ${homeFlag ? `<img class="flag" src="${homeFlag}" alt="">` : `<div class="flag"></div>`}
-                    </div>
-                    <div class="score-box">
-                        <input type="number" min="0" class="score-field home-score" value="${getDraftValue(fixture.matchId, "home")}">
-                        <span class="vs-label">VS</span>
-                        <input type="number" min="0" class="score-field away-score" value="${getDraftValue(fixture.matchId, "away")}">
-                    </div>
-                    <div class="team-vs away">
-                        ${awayFlag ? `<img class="flag" src="${awayFlag}" alt="">` : `<div class="flag"></div>`}
-                        <span>${awayLabel}</span>
-                    </div>
-                `;
+                        <div style="position: absolute; top: 12px; left: 24px;" class="group-date-header">${fixture.date}</div>
+                        <div class="team-vs home">
+                            <span class="desktop-only">${homeLabel}</span>
+                            <span class="mobile-only" style="font-weight:700;">${homeCode}</span>
+                            ${homeFlag ? `<img class="flag" src="${homeFlag}" alt="">` : `<div class="flag"></div>`}
+                        </div>
+                        <div class="score-box">
+                            <input type="number" min="0" class="score-field home-score" value="${getDraftValue(fixture.matchId, "home")}">
+                            <span class="vs-label">VS</span>
+                            <input type="number" min="0" class="score-field away-score" value="${getDraftValue(fixture.matchId, "away")}">
+                        </div>
+                        <div class="team-vs away">
+                            ${awayFlag ? `<img class="flag" src="${awayFlag}" alt="">` : `<div class="flag"></div>`}
+                            <span class="desktop-only">${awayLabel}</span>
+                            <span class="mobile-only" style="font-weight:700;">${awayCode}</span>
+                        </div>
+                    `;
 
                 const homeInput = card.querySelector(".home-score");
                 const awayInput = card.querySelector(".away-score");
@@ -359,20 +418,26 @@
         function renderStandings(groupRankings) {
             const current = groupRankings.find((entry) => entry.groupId === currentGroup);
             const standings = current?.teams || [];
-            standingsBody.innerHTML = standings.map((row, i) => {
+            standingsBody.innerHTML = standings.map((row, index) => {
                 const flagSrc = getTeamFlag(row.teamId, data.teams);
+                const teamLabel = getTeamLabel(row.teamId, data.teams);
+                const teamCode = getTeamCode(row.teamId, data.teams);
                 return `
                     <tr>
-                        <td class="num-cell">${i + 1}</td>
+                        <td class="num-cell">${index + 1}</td>
                         <td class="team-cell">
                             <div class="team-display">
                                 ${flagSrc ? `<img class="flag" src="${flagSrc}" alt="">` : `<div class="flag"></div>`}
-                                <span>${getTeamLabel(row.teamId, data.teams)}</span>
+                                <span class="desktop-only">${teamLabel}</span>
+                                <span class="mobile-only" style="font-weight:800;">${teamCode}</span>
                             </div>
                         </td>
                         <td class="stat-cell">${row.win}</td>
                         <td class="stat-cell">${row.draw}</td>
                         <td class="stat-cell">${row.loss}</td>
+                        <td class="stat-cell">${row.gf || 0}</td>
+                        <td class="stat-cell">${row.ga || 0}</td>
+                        <td class="stat-cell">${row.gd || 0}</td>
                         <td class="pts-cell">${row.pts}</td>
                     </tr>
                 `;

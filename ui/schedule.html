@@ -22,6 +22,12 @@
             font-size: 1.1rem;
         }
 
+        @media (max-width: 768px) {
+            .match-time {
+                font-size: 0.9rem;
+            }
+        }
+
         .match-teams {
             display: flex;
             align-items: center;
@@ -93,32 +99,43 @@
 
         @media (max-width: 768px) {
             .match-card {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 15px;
-                padding: 20px;
+                grid-template-columns: 65px 1fr 50px;
+                text-align: middle;
+                gap: 8px;
+                padding: 14px 10px;
+                border-radius: 12px;
             }
 
             .match-teams {
-                flex-direction: row;
-                justify-content: center;
-                gap: 15px;
+                gap: 8px;
             }
 
             .team-vs {
-                flex: none;
-                font-size: 0.95rem;
+                gap: 6px;
+                font-size: 0.85rem;
+            }
+
+            .team-vs span {
+                max-width: 65px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .vs-label {
+                width: 20px;
+                font-size: 0.6rem;
             }
 
             .venue {
-                text-align: center;
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-                padding-top: 12px;
+                font-size: 0.75rem;
+                border-top: none;
+                padding-top: 0;
+                text-align: right;
             }
+        }
 
-            .filter-row {
-                grid-template-columns: 1fr;
-            }
+        .filter-row {
+            grid-template-columns: 1fr;
         }
     </style>
 </head>
@@ -154,6 +171,7 @@
 
     <script type="module">
         import {
+            getTeamCode,
             getTeamFlag,
             getTeamLabel,
             loadTournamentData
@@ -191,6 +209,8 @@
 
                 const homeLabel = getTeamLabel(fixture.homeTeamId, data.teams);
                 const awayLabel = getTeamLabel(fixture.awayTeamId, data.teams);
+                const homeCode = getTeamCode(fixture.homeTeamId, data.teams);
+                const awayCode = getTeamCode(fixture.awayTeamId, data.teams);
                 const homeFlag = getTeamFlag(fixture.homeTeamId, data.teams);
                 const awayFlag = getTeamFlag(fixture.awayTeamId, data.teams);
                 const timeStr = fixture.kickoffUtc ? fixture.kickoffUtc.substring(11, 16) : "-";
@@ -201,13 +221,15 @@
                     <div class="match-time">${timeStr}</div>
                     <div class="match-teams">
                         <div class="team-vs home">
-                            <span>${homeLabel}</span>
+                            <span class="desktop-only">${homeLabel}</span>
+                            <span class="mobile-only" style="font-weight:800;">${homeCode}</span>
                             ${homeFlag ? `<img class="flag" src="${homeFlag}" alt="">` : `<div class="flag"></div>`}
                         </div>
                         <div class="vs-label">VS</div>
                         <div class="team-vs away">
                             ${awayFlag ? `<img class="flag" src="${awayFlag}" alt="">` : `<div class="flag"></div>`}
-                            <span>${awayLabel}</span>
+                            <span class="desktop-only">${awayLabel}</span>
+                            <span class="mobile-only" style="font-weight:800;">${awayCode}</span>
                         </div>
                     </div>
                     <div class="venue">${fixture.groupId}조</div>

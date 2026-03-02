@@ -272,6 +272,10 @@ export function getTeamLabel(teamId, teams) {
     return teams[teamId]?.ko || teams[teamId]?.en || teamId;
 }
 
+export function getTeamCode(teamId, teams) {
+    return teams[teamId]?.code || teamId.substring(0, 3).toUpperCase();
+}
+
 export function getTeamFlag(teamId, teams) {
     const flag = teams[teamId]?.flag;
     if (!flag) return "";

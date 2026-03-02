@@ -187,13 +187,36 @@
         @media (max-width: 1200px) {
             .simplified-bracket {
                 grid-template-columns: 1fr;
-                gap: 60px;
+                gap: 40px;
             }
 
             .round-col {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 15px;
+            }
+
+            .match-connector {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .round-col {
+                grid-template-columns: 1fr;
+            }
+
+            .trophy-image {
+                font-size: 5rem;
+            }
+
+            .trophy-glow {
+                width: 200px;
+                height: 200px;
+            }
+
+            .final-match-card {
+                padding: 20px;
             }
         }
     </style>
@@ -213,9 +236,10 @@
 
     <main class="app-container" style="max-width: 1500px; padding-top: 120px;">
         <header-section style="text-align: center;">
-            <h1 style="font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 5px;">ROAD TO THE FINAL
+            <h1 style="font-size: clamp(2rem, 8vw, 4rem); font-weight: 900; letter-spacing: -2px; margin-bottom: 5px;">
+                ROAD TO THE FINAL
             </h1>
-            <p class="subtitle" style="font-size: 1.2rem; opacity: 0.6;">FIFA WORLD CUP 2026 32강</p>
+            <p class="subtitle" style="font-size: var(--subtitle-size); opacity: 0.6;">FIFA WORLD CUP 2026 BRACKET</p>
             <div class="bracket-export-actions">
                 <button id="download-bracket-btn" class="btn btn-primary">32강 대진 다운로드</button>
             </div>
@@ -273,10 +297,10 @@
                                 <th class="stat-cell">승</th>
                                 <th class="stat-cell">무</th>
                                 <th class="stat-cell">패</th>
-                                <th class="stat-cell">득</th>
-                                <th class="stat-cell">실</th>
+                                <th class="stat-cell mobile-hide">득</th>
+                                <th class="stat-cell mobile-hide">실</th>
                                 <th class="stat-cell">차</th>
-                                <th class="stat-cell">피파랭킹</th>
+                                <th class="stat-cell mobile-hide">피파랭킹</th>
                                 <th class="pts-cell">점수</th>
                             </tr>
                         </thead>
@@ -297,6 +321,7 @@
             buildScoresWithDefaultDraw,
             computeAllGroupStandings,
             generateRoundOf32,
+            getTeamCode,
             getTeamFlag,
             getTeamLabel,
             loadTournamentData,
@@ -331,12 +356,21 @@
             downloadButton.textContent = "PNG 생성 중...";
 
             try {
+                // Force desktop layout for capture
+                const originalStyle = exportTarget.getAttribute('style') || '';
+                exportTarget.style.width = '1400px';
+                exportTarget.style.minWidth = '1400px';
+
                 const canvas = await window.html2canvas(exportTarget, {
                     scale: 2,
                     backgroundColor: null,
                     useCORS: true,
-                    logging: false
+                    logging: false,
+                    windowWidth: 1400
                 });
+
+                // Restore styles
+                exportTarget.setAttribute('style', originalStyle);
 
                 const link = document.createElement("a");
                 link.href = canvas.toDataURL("image/png");
@@ -376,6 +410,7 @@
             }
             const flagSrc = getTeamFlag(participant.teamId, teams);
             const label = getTeamLabel(participant.teamId, teams);
+            const code = getTeamCode(participant.teamId, teams);
             const source = formatSource(participant.source);
             return `
                 <div class="bracket-slot">
@@ -415,22 +450,25 @@
                 .map((entry, index) => {
                     const rowClass = index < 8 ? "qualify-zone" : "eliminated-zone";
                     const flagSrc = getTeamFlag(entry.teamId, teams);
+                    const label = getTeamLabel(entry.teamId, teams);
+                    const code = getTeamCode(entry.teamId, teams);
                     return `
                         <tr class="${rowClass}">
-                            <td>${index + 1}</td>
+                            <td class="num-cell">${index + 1}</td>
                             <td class="team-cell">
                                 <div class="team-display">
                                     ${flagSrc ? `<img class="flag-mini" src="${flagSrc}" alt="">` : `<div class="flag-mini"></div>`}
-                                    <span>${getTeamLabel(entry.teamId, teams)} (${entry.groupId})</span>
+                                    <span class="desktop-only">${label} (${entry.groupId})</span>
+                                    <span class="mobile-only" style="font-weight:800;">${code} (${entry.groupId})</span>
                                 </div>
                             </td>
-                            <td>${entry.win}</td>
-                            <td>${entry.draw}</td>
-                            <td>${entry.loss}</td>
-                            <td>${entry.gf}</td>
-                            <td>${entry.ga}</td>
-                            <td>${entry.gd}</td>
-                            <td>${entry.fifaRanking}</td>
+                            <td class="stat-cell">${entry.win}</td>
+                            <td class="stat-cell">${entry.draw}</td>
+                            <td class="stat-cell">${entry.loss}</td>
+                            <td class="stat-cell mobile-hide">${entry.gf}</td>
+                            <td class="stat-cell mobile-hide">${entry.ga}</td>
+                            <td class="stat-cell">${entry.gd}</td>
+                            <td class="stat-cell mobile-hide">${entry.fifaRanking}</td>
                             <td class="pts-cell">${entry.pts}</td>
                         </tr>
                     `;
