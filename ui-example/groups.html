@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>킹우의수 | 조별순위</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .group-card {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="simulator.html" class="logo">킹우의수</a>
+        </div>
+        <nav>
+            <a href="simulator.html">시뮬레이터</a>
+            <a href="groups.html" class="active">조별순위</a>
+            <a href="schedule.html">스케줄</a>
+        </nav>
+    </header>
+
+    <main class="app-container">
+        <header-section class="animate">
+            <h1>조별 순위표</h1>
+            <p class="subtitle">모든 조별리그 실시간 순위를 한눈에 확인하세요.</p>
+        </header-section>
+
+        <div id="groups-container" class="animate delay-1">
+            <!-- All group cards rendered here -->
+        </div>
+    </main>
+
+    <script>
+        const groupsData = [
+            { id: 'A', teams: ["멕시코", "대한민국", "남아프리카 공화국", "유럽 플레이오프 D"] },
+            { id: 'B', teams: ["캐나다", "카타르", "스위스", "유럽 플레이오프 A"] },
+            { id: 'C', teams: ["브라질", "모로코", "아이티", "스코틀랜드"] },
+            { id: 'D', teams: ["미국", "파라과이", "호주", "유럽 플레이오프 C"] },
+            { id: 'E', teams: ["독일", "에콰도르", "코트디부아르", "퀴라소"] },
+            { id: 'F', teams: ["네덜란드", "일본", "튀니지", "유럽 플레이오프 B"] },
+            { id: 'G', teams: ["벨기에", "이집트", "이란", "뉴질랜드"] },
+            { id: 'H', teams: ["스페인", "우루과이", "사우디아라비아", "카보베르데"] },
+            { id: 'I', teams: ["프랑스", "세네갈", "노르웨이", "대륙간 플레이오프 2"] },
+            { id: 'J', teams: ["아르헨티나", "알제리", "오스트리아", "요르단"] },
+            { id: 'K', teams: ["포르투갈", "콜롬비아", "우즈베키스탄", "대륙간 플레이오프 1"] },
+            { id: 'L', teams: ["잉글랜드", "크로아티아", "가나", "파나마"] }
+        ];
+
+        const container = document.getElementById('groups-container');
+
+        groupsData.forEach((g) => {
+            const card = document.createElement('div');
+            card.className = `glass-card group-card`;
+            card.innerHTML = `
+                <div class="group-title" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 25px;">${g.id}조 순위</div>
+                <div class="standing-table-container">
+                    <table class="standing-table">
+                        <thead>
+                            <tr>
+                                <th class="num-cell">순위</th>
+                                <th class="team-cell">팀</th>
+                                <th class="stat-cell">승</th>
+                                <th class="stat-cell">무</th>
+                                <th class="stat-cell">패</th>
+                                <th class="stat-cell">득</th>
+                                <th class="stat-cell">실</th>
+                                <th class="stat-cell">차</th>
+                                <th class="pts-cell">점수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${g.teams.map((t, i) => `
+                                <tr>
+                                    <td class="num-cell">${i + 1}</td>
+                                    <td class="team-cell">
+                                        <div class="team-display">
+                                            <div class="flag"></div>
+                                            <span>${t}</span>
+                                        </div>
+                                    </td>
+                                    <td class="stat-cell">0</td>
+                                    <td class="stat-cell">0</td>
+                                    <td class="stat-cell">0</td>
+                                    <td class="stat-cell">0</td>
+                                    <td class="stat-cell">0</td>
+                                    <td class="stat-cell">0</td>
+                                    <td class="pts-cell">0</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    </script>
+</body>
+
+</html>
