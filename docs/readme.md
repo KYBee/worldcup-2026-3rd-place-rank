@@ -1,450 +1,100 @@
-# 3rdPlace Lab 기획안 v0.4
+# 3rdPlace Lab — Data Pack (샘플) & MVP 화면 정의
 
-## 48팀 포맷 시나리오 계산기 — “3rdPlace Lab”
-
-## 1) 제품 목표 재정의
-
-### 핵심 문제
-
-- 48팀 포맷(12개 조)에서 “**3위 12팀 중 상위 8팀**”이 올라가며,
-- 그 조합에 따라 **32강 대진(Annex C 매핑)**이 바뀌기 때문에 팬들이 혼란.
-
-### 해결
-
-- 유저가 조별리그 **전체 경기(72경기)**를 스코어/승무패로 입력하며 what‑if 시나리오를 만들면,
-    1. 조 순위(규정 타이브레이커 포함)
-    2. 3위 12팀 통합 랭킹 + 8위 컷라인
-    3. 32강 브래킷(placeholder → 확정 매치업 자동 전환)
-- 을 즉시 계산/표시.
+이 폴더는 **3rdPlace Lab**의 무서버/정적 호스팅 아키텍처를 전제로 한 **데이터팩(Data Pack) 샘플**입니다.  
+현재 포함된 팀/조/일정은 **placeholder(가짜 데이터)** 이며, 실제 2026 월드컵 공식 데이터(48팀/조 편성/경기 일정)가 확보되면 교체하는 구조입니다.
 
 ---
 
-## 2) 사용자/사용 흐름
+## 1) MVP에서 “반드시 있는” 화면(웹)
 
-### 대회 시작 전(Pre‑tournament)
+아래 4개 화면이 **최소 제품(MVP)** 기준 핵심 화면입니다.
 
-- 공식 결과 없음 → 모든 경기 `Scheduled`
-- 유저가 72경기 모두 입력 가능
-- 입력이 부족하면(몇 경기 비어있음) 순위/3위/브래킷은 “진행중/미확정” 상태로 표시
+### A. 조별 구성 보기 (Groups View)
+- 각 조(A~L)의 **팀 구성**을 한눈에 보여줍니다.
+- 팀명/국기(에셋) 표시
+- 조 클릭 시 해당 조 상세(팀 4개 + 그 조 경기들로 이동)
 
-### 대회 진행 중(Live Simulation)
+> 이 화면은 `tournament.json`의 `groups[]`, `teams{}`만으로 구성됩니다.
 
-- 일부 경기는 `officialResult`로 고정(잠금)
-- 남은 경기는 유저가 시뮬레이션 입력
+### B. 경기 일정 보기 (Schedule View)
+- 조별리그 **전체 경기 목록(72경기)**를 날짜/시간 기준으로 보여줍니다.
+- 필터: 날짜, 조(A~L), 팀 검색
+- 각 경기의 킥오프 시간(`kickoffUtc`)과 장소(`venue`)는 **있으면 표시**, 없으면 숨김/대체 문구.
 
-### 공식 결과 반영 방식 (MVP)
+> 이 화면은 `tournament.json`의 `matches[]`(특히 `kickoffUtc`, `venue`)를 사용합니다.  
+> ※ MVP에서는 스크래핑보다 “데이터팩 JSON 업데이트(커밋/배포)” 방식이 안정적입니다.
 
-- 자동 연동은 후순위
-- MVP는 `official_results.json`을 **수동 업데이트(배포로 반영)**해도 충분
+### C. 스코어 입력(시뮬레이터) (Simulator View)
+- 경우의 수 입력기: 유저가 **조별로 경기 스코어를 입력**합니다.
+- 기본 상태(대회 시작 전): 모든 경기는 입력 가능(locked 없음)
+- 대회 진행 중: `official_results.json`에 `final`로 들어간 경기는 기본 잠금(Override 토글로만 변경 가능)
 
----
+> 사용자는 여기서 입력한 결과로 **조 순위 + 3위 12팀 랭킹 + 32강**을 즉시 계산합니다.
 
-## 3) 화면(IA) 확정안
+### D. 32강 브래킷 보기 (Round of 32 View)
+- 최종 목표 화면: 32강 매치업을 보여줍니다.
+- 각 매치 카드에 **2단계 표기**를 권장합니다.
+  1) UNRESOLVED (placeholder): “1A vs Best 3rd (C/E/F/H/I)” 같은 슬롯 라벨
+  2) RESOLVED (scenario): 시나리오가 완성되면 “Mexico(1A) vs Japan(3E)”처럼 팀명으로 확정 표시
+- 내보내기:
+  - **Download PNG** (커뮤니티 공유용)
+  - **Print / Save as PDF** (문서/저장용)
 
-디자인 시안 기반으로, “웹 대시보드” 구조로 고정하되 추후 변경 가능.
-
-1. **Overview (대시보드)**
-    - 12개 조 요약 카드 + 현재 3위 컷라인 요약 + 브래킷 프리뷰
-2. **Simulator (경기 입력)**
-    - 그룹 탭(A~L) + 경기 입력 리스트 + 실시간 조 순위/3위 영향 표시
-3. **Group Standings**
-    - 12개 조 전체 순위표(동률/타이브레이커 적용 안내 포함)
-4. **3rd Place Lab (핵심 USP)**
-    - 12개 조 3위 통합 랭킹 + 8위 컷라인 + 상태 배지 + 영향 경기 하이라이트
-5. **Round of 32**
-    - 브래킷 전용 화면 (UNRESOLVED placeholder ↔ RESOLVED 확정)
-    - Export: PNG / Print(PDF)
-6. **Scenarios**
-    - 저장된 시나리오 관리(local) + 공유 링크 생성
-7. **Rules / About**
-    - 규정 근거/면책/출처(신뢰 확보 + 광고 운영에도 도움)
-
-> MVP에서는 로그인/프로필 화면 없음(완전 무서버 운영)
-> 
+> 32강 매핑은 `annexC.json`(Annex C lookup table)을 통해 결정됩니다.
 
 ---
 
-## 4) 시스템 아키텍처(무서버/정적 호스팅)
+## 2) “처음에는 다 0”에 대한 처리 원칙
 
-### 목표
+- UI 입력칸에는 `0 - 0`처럼 기본값이 보일 수 있지만,
+- 계산 로직에서 **“미입력 경기(null)”** 과 **“0-0 무승부 확정”**는 완전히 다릅니다.
 
-- 서버 없이(정적 호스팅)도:
-    - 계산/시뮬레이션
-    - 저장/공유
-    - 브래킷 생성
-    - 내보내기(PNG/PDF)
-    - 광고 삽입(AdSense)
-        
-        를 가능하게.
-        
-
-### 구성
-
-- **Frontend SPA** (React + Vite 또는 Next.js static export)
-- **Pure TS Core Engine** (규정 계산 로직)
-- **Tournament Data Pack(JSON)** (조/팀/경기/매핑 데이터)
-- **Scenario Storage**
-    - localStorage: 자동 저장/저장 시나리오
-    - URL state: 공유 링크(압축)
-
-### “UI <-> 계산 로직” 분리 원칙(중요)
-
-- UI는 상태 입력/표시만
-- 계산은 전부 `core/`의 순수 함수로 처리(테스트 가능)
+권장 구현:
+- 내부적으로는 결과를 기본 `null`로 두고,
+- 사용자가 저장/적용하는 순간에만 `{home:0, away:0}` 같은 스코어가 결과로 기록되도록 합니다.
 
 ---
 
-## 5) 데이터 구조 설계(핵심)
+## 3) 포함 파일
 
-### 5.1 Tournament 정의(재사용 가능 설계)
+### `tournaments/fwc-2026/tournament.json`
+- (샘플) 48팀(placeholder) / 12개 조(A~L) / 조별 72경기 정의
+- 실제 운영 시, 여기에 **공식 팀/조/일정(날짜/시간 포함)**을 반영합니다.
 
-`/data/tournaments/{tournamentId}/tournament.json`
+### `tournaments/fwc-2026/official_results.json`
+- (기본) `{}` 빈 파일 = “대회 시작 전” 상태
+- 대회 진행 중에는, 끝난 경기만 `final`로 채워서 **잠금/고정 결과**로 사용합니다.
 
-```tsx
-type TournamentConfig = {
-  id: string;                // "fwc-2026"
-  name: { ko: string; en: string };
-  format: {
-    groupsCount: 12;         // A~L
-    teamsPerGroup: 4;
-    thirdPlaceQualifiers: 8; // 12개 중 8개
-  };
-  groups: Array<{
-    groupId: string;         // "A"..."L"
-    teamIds: string[];       // length 4
-  }>;
-  teams: Record<string, {
-    id: string;              // "USA"
-    name: { ko: string; en: string };
-    flagAsset: string;       // "/flags/usa.svg"
-    fifaRanking?: number;    // V2 또는 데이터팩에서 제공(규정 반영)
-  }>;
-  // 경기 메타(시간/장소)는 optional (없어도 시뮬 가능)
-  matches: MatchDef[];       // 72개
-};
-```
+### `tournaments/fwc-2026/official_results.example.json`
+- 스키마 예시(잠금 경기 1개 포함)
 
-### 5.2 Match 정의
+### `tournaments/fwc-2026/annexC.sample.json`
+- **SAMPLE ONLY — 실제 FIFA Annex C가 아닙니다.**
+- 파이프라인(키 생성 → 슬롯 매핑 → 브래킷 반영) 연결을 위한 더미 데이터입니다.
+- 실제 서비스에서는 FIFA 규정의 Annex C 표를 추출해 `annexC.json`으로 교체합니다.
 
-```tsx
-type MatchDef = {
-  matchId: string;          // "A-M1" 같은 규칙적인 ID (중요)
-  groupId: string;          // "A"
-  homeTeamId: string;
-  awayTeamId: string;
-  kickoffUtc?: string;
-  venue?: string;
-  matchDay?: 1 | 2 | 3;
-};
-```
-
-> “스크래핑”은 MVP에선 비추천.
-> 
-> 
-> 이유: 사이트 구조/정책/변경 리스크가 큼.
-> 
-> 대신:
-> 
-> - 조별 매치업은 규정 패턴으로 생성 가능(자동 생성 스크립트)
-> - 킥오프/도시 같은 메타는 필요하면 **데이터팩 JSON을 수동/반자동으로 업데이트**(커밋/배포)
-
-### 5.3 공식 결과 / 시나리오 결과(2중 레이어)
-
-`/data/tournaments/{id}/official_results.json`
-
-```tsx
-type OfficialResults = Record<string /*matchId*/, {
-  home: number;
-  away: number;
-  status: "final";          // final만 잠금
-  updatedAtUtc?: string;
-}>;
-```
-
-사용자 시나리오 상태(브라우저에 저장 / URL 공유):
-
-```tsx
-type ScenarioState = {
-  v: number;                 // schema version
-  tournamentId: string;
-  title?: string;
-  // matchId -> score (only overrides / filled matches)
-  results: Record<string, { home: number; away: number }>;
-  // optional advanced:
-  fairPlay?: Record<string /*teamId*/, number>; // V2
-  createdAt: number;
-  updatedAt: number;
-};
-```
-
-### 5.4 “실제로 계산에 쓰는 결과” 규칙
-
-- `effectiveResult(matchId) = scenario.results[matchId] ?? official[matchId] ?? null`
-- UI 잠금 규칙:
-    - `official[matchId]?.status === "final"`이면 기본 잠금
-    - 단, “Override 토글” 켜면 scenario로 덮어쓰기 가능(경고 표시)
+### `src/core/types.ts`
+- UI/로직 분리를 위한 핵심 TypeScript 타입 모음
 
 ---
 
-## 6) 코어 엔진 설계(순수 함수)
+## 4) Match ID 규칙(샘플)
 
-폴더 구조 예시:
+이 샘플은 matchId를 다음과 같이 부여합니다:
 
-```
-src/
-  core/
-    types.ts
-    results.ts              // effectiveResult merge
-    standings/
-      calcGroupTable.ts
-      tieBreaker.ts
-      explainTieBreak.ts
-    thirdplace/
-      rankThirdPlaces.ts
-    bracket/
-      bracketTemplate.ts    // placeholder 슬롯 정의
-      annexCMapping.ts      // 495조합 lookup
-      resolveRoundOf32.ts
-    validate/
-      validateDataPack.ts
-  ui/...
-```
+- `A-M1..A-M6` (Group A 6경기)
+- ...
+- `L-M1..L-M6` (Group L 6경기)
 
-### 6.1 조 순위 계산
-
-입력: 그룹, 경기 결과(effective)
-
-출력: standings table + tie-break explanation
-
-```tsx
-type StandingRow = {
-  teamId: string;
-  played: number;
-  win: number; draw: number; loss: number;
-  gf: number; ga: number; gd: number;
-  pts: number;
-};
-
-type GroupStandings = {
-  groupId: string;
-  rows: StandingRow[]; // sorted
-  tieBreakNotes?: Array<{
-    teams: string[];
-    reason: string;     // "Head-to-head applied", "GD applied" 등
-  }>;
-  complete: boolean;    // 해당 조 6경기 모두 결과가 있는지
-};
-```
-
-**중요 포인트**
-
-- “완전 FIFA 동일” 목표이므로, tie-break는 단계별로 설계(최소한 엔진 구조는 열어두기)
-- MVP라도 “규정 단계”를 코드 구조로 반영해두면(중간 단계가 빈 값이어도) 나중에 확장 쉬움
-
-### 6.2 3위 12팀 랭킹 + 컷라인
-
-```tsx
-type ThirdPlaceEntry = {
-  groupId: string;
-  teamId: string;
-  pts: number; gd: number; gf: number;
-  // optional: fairPlay, fifaRanking
-};
-type ThirdPlaceRanking = {
-  entries: ThirdPlaceEntry[]; // sorted
-  cutIndex: 7; // 0-based (8th)
-  complete: boolean; // 모든 조의 3위가 확정 가능한 수준인지
-};
-```
-
-추가로 UI용 “상태 배지” 계산:
-
-- Likely / On the edge / Unlikely는 확률이 아니라 **휴리스틱**(문서화해서 논쟁 방지)
-- 예: 8위 대비 승점 차, 득실 차로 분류
-
-### 6.3 32강 브래킷(placeholder → 확정)
-
-브래킷은 2단계를 반드시 지원:
-
-- **UNRESOLVED (B표기)**: “1A vs Best 3rd (C/E/F/H/I)”
-- **RESOLVED (A확정)**: “Mexico(1A) vs Japan(3E)” (시나리오 확정 결과)
-
-구조:
-
-```tsx
-type BracketMatch = {
-  matchId: string; // "R32-01"...
-  slotLabel: string; // 항상 존재: "1A vs 3 C/E/F/H/I"
-  resolved?: {
-    homeTeamId: string;
-    awayTeamId: string;
-    homeLabel: string; // "Mexico (1A)"
-    awayLabel: string; // "Japan (3E)"
-    mappingKey?: string; // "ABEF..." (선택)
-  };
-  status: "unresolved" | "resolved";
-};
-type RoundOf32 = {
-  matches: BracketMatch[];
-  status: "unresolved" | "partial" | "resolved";
-};
-```
-
-- *Annex C 매핑 데이터(495 조합)**는 로직이 아니라 **lookup table**로 처리:
-- key: “3위로 올라온 조들의 집합” (예: `"ABEFGHIJ"`)
-- value: 각 슬롯(1A,1B,…)에 어떤 3위 조가 붙는지
-
-개발 방식 추천:
-
-- `annexC.csv`(사람이 보기 좋음) → build script로 `annexC.json` 생성
-- `resolveRoundOf32()`는 `(mappingKey) -> assignments`만 수행
+> 실제 데이터팩에서도 **matchId는 절대 바뀌지 않는 키**로 유지하는 것을 강력 추천합니다.  
+> (official 결과/시나리오 저장/URL 공유가 모두 matchId를 키로 삼기 때문)
 
 ---
 
-## 7) 상태 관리/라우팅/캐싱(프론트 설계)
+## 5) Export-to-image(PNG) 주의사항
 
-### 라우팅(화면)
+브래킷을 DOM → PNG로 내보낼 때, 국기/로고 같은 이미지가 외부 도메인(CORS 미허용)에서 로드되면
+캔버스가 “tainted”되어 내보내기가 실패할 수 있습니다.
 
-- `/` Overview
-- `/simulator`
-- `/standings`
-- `/thirdplace`
-- `/roundof32`
-- `/scenarios`
-- `/rules`
-
-### 앱 전역 상태(AppState)
-
-최소 상태만 들고, 나머지는 “파생 계산(derived)”로 만든다.
-
-```tsx
-type AppState = {
-  tournamentId: string;
-  scenario: ScenarioState;
-  official: OfficialResults; // 로드된 데이터팩(정적)
-  ui: {
-    selectedGroupId?: string;
-    selectedTeamId?: string;
-    overrideEnabled?: boolean;
-    lang: "ko" | "en";
-  };
-};
-```
-
-### 파생 데이터(Selector)
-
-- `getEffectiveResults(state)`
-- `getAllGroupStandings(state)`
-- `getThirdPlaceRanking(state)`
-- `getRoundOf32(state)`
-
-**장점**
-
-- UI 교체해도 로직 재사용
-- 테스트가 쉬움
-- 성능 최적화(memoization) 가능
-
----
-
-## 8) 저장/공유 설계
-
-### 8.1 localStorage 정책
-
-- `3plab:{tournamentId}:autosave` : 마지막 편집 상태
-- `3plab:{tournamentId}:scenarios` : 시나리오 목록(메타 + 본문)
-
-자동 저장:
-
-- 입력 후 300~800ms debounce로 저장(과한 쓰기 방지)
-
-마이그레이션:
-
-- `scenario.v`로 버전 관리해서 스키마 변경 대비
-
-### 8.2 URL 공유(압축)
-
-URL에 들어갈 것만 최소화:
-
-- tournamentId
-- results map(입력된 경기만)
-- v
-
-예시:
-
-- `/simulator#s=COMPRESSED_PAYLOAD`
-
-압축은 라이브러리로 처리(예: lz-string/pako 등).
-
-복원 실패 시 “버전 불일치/손상” 안내.
-
----
-
-## 9) Export(브래킷 저장) 설계
-
-브래킷 화면에 2개 버튼 제공:
-
-1. **Download PNG**
-- Export mode: 광고/버튼/입력 UI 숨기고 브래킷만 렌더
-- 2x 해상도 토글
-1. **Print / Save as PDF**
-- print CSS로 브래킷만 출력되게 구성
-
-> 이건 MVP에도 넣기 좋고, 커뮤니티 확산(스크린샷 공유)에 매우 도움 됨.
-> 
-
----
-
-## 10) 광고(AdSense) 삽입 계획
-
-- MVP에서는 “광고 슬롯 위치”만 디자인에 반영해도 충분
-- 실제 AdSense는 승인 후 코드 삽입
-
-배치 원칙:
-
-- 스코어 입력 버튼/슬라이더 등 **오클릭 가능 영역 주변은 피함**
-- Rules/About 또는 사이드 패널/하단 여백에 배치
-
-(동의/개인화 광고 이슈는 트래픽 발생 국가에 따라 V1~V2에서 강화)
-
----
-
-## 11) 테스트/검증 계획(필수)
-
-### 단위 테스트
-
-- 조 순위 계산:
-    - 기본 케이스(승점/득실/다득점)
-    - 동률 케이스(2팀, 3팀 동률)
-- 3위 랭킹:
-    - 컷라인 근접 케이스
-- 브래킷 매핑:
-    - mappingKey가 주어졌을 때 슬롯 배정이 정확한지
-    - key 정렬/정규화가 안정적인지
-
-### 데이터 검증
-
-- tournament.json이 12조 × 4팀, matches 72개인지
-- matchId 중복, 팀 중복, 그룹 불일치 체크
-
----
-
-## 12) 구현 마일스톤(추천 순서)
-
-1. 데이터팩 스키마 확정 + 샘플 tournament.json 생성
-2. `core/standings` 구현 + 테스트
-3. `core/thirdplace` 구현 + 테스트
-4. Simulator 화면(입력 → 파생 계산 표시)
-5. Bracket placeholder 템플릿 구현
-6. Annex C mapping data 형태 결정(일단 소수 샘플로 end-to-end)
-7. Annex C 전체 데이터화 + `resolveRoundOf32()` 완성
-8. Scenarios(저장/URL 공유)
-9. Export(PNG/PDF)
-10. Rules/About + 광고 슬롯
-
----
-
-## 13) 아직 열어둔 선택지(디자인 이후 확정)
-
-- 입력 UX: 스코어 입력만 vs W/D/L quick mode 병행
-- My Team Mode의 강도(필터 vs 하이라이트)
-- “대회 재사용 템플릿”을 어디까지 일반화할지(룰/조 수까지 완전 데이터화?)
+권장:
+- 가능하면 국기/로고 에셋을 **같은 도메인에서 서빙(프로젝트 빌드에 포함)**하세요.
