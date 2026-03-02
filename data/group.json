@@ -1,0 +1,115 @@
+{
+    "tournament": "FIFA World Cup 2026",
+    "groupStage": {
+        "groups": [
+            {
+                "groupId": "A",
+                "teams": [
+                    "Mexico",
+                    "South Africa",
+                    "South Korea",
+                    "European Playoff D"
+                ]
+            },
+            {
+                "groupId": "B",
+                "teams": [
+                    "Canada",
+                    "Qatar",
+                    "Switzerland",
+                    "European Playoff A"
+                ]
+            },
+            {
+                "groupId": "C",
+                "teams": [
+                    "Brazil",
+                    "Morocco",
+                    "Haiti",
+                    "Scotland"
+                ]
+            },
+            {
+                "groupId": "D",
+                "teams": [
+                    "United States",
+                    "Paraguay",
+                    "Australia",
+                    "UEFA Playoff C"
+                ]
+            },
+            {
+                "groupId": "E",
+                "teams": [
+                    "Germany",
+                    "Ecuador",
+                    "Côte d'Ivoire",
+                    "Curaçao"
+                ]
+            },
+            {
+                "groupId": "F",
+                "teams": [
+                    "Netherlands",
+                    "Japan",
+                    "Tunisia",
+                    "UEFA Playoff B"
+                ]
+            },
+            {
+                "groupId": "G",
+                "teams": [
+                    "Belgium",
+                    "Egypt",
+                    "Iran",
+                    "New Zealand"
+                ]
+            },
+            {
+                "groupId": "H",
+                "teams": [
+                    "Spain",
+                    "Uruguay",
+                    "Saudi Arabia",
+                    "Cape Verde"
+                ]
+            },
+            {
+                "groupId": "I",
+                "teams": [
+                    "France",
+                    "Senegal",
+                    "Norway",
+                    "Intercontinental Playoff 2"
+                ]
+            },
+            {
+                "groupId": "J",
+                "teams": [
+                    "Argentina",
+                    "Algeria",
+                    "Austria",
+                    "Jordan"
+                ]
+            },
+            {
+                "groupId": "K",
+                "teams": [
+                    "Portugal",
+                    "Colombia",
+                    "Uzbekistan",
+                    "Intercontinental Playoff 1"
+                ]
+            },
+            {
+                "groupId": "L",
+                "teams": [
+                    "England",
+                    "Croatia",
+                    "Ghana",
+                    "Panama"
+                ]
+            }
+        ]
+    }
+}
