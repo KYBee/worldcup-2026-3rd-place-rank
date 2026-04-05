@@ -14,14 +14,14 @@
             "matchId": "A-M2",
             "groupId": "A",
             "homeTeam": "South Korea",
-            "awayTeam": "UEFA Playoff D",
+            "awayTeam": "Czechia",
             "date": "2026-06-11",
             "kickoffUtc": "2026-06-11T21:00:00Z"
         },
         {
             "matchId": "A-M3",
             "groupId": "A",
-            "homeTeam": "UEFA Playoff D",
+            "homeTeam": "Czechia",
             "awayTeam": "South Africa",
             "date": "2026-06-18",
             "kickoffUtc": "2026-06-18T18:00:00Z"
@@ -37,7 +37,7 @@
         {
             "matchId": "A-M5",
             "groupId": "A",
-            "homeTeam": "UEFA Playoff D",
+            "homeTeam": "Czechia",
             "awayTeam": "Mexico",
             "date": "2026-06-24",
             "kickoffUtc": "2026-06-24T18:00:00Z"
@@ -54,7 +54,7 @@
             "matchId": "B-M1",
             "groupId": "B",
             "homeTeam": "Canada",
-            "awayTeam": "UEFA Playoff A",
+            "awayTeam": "Bosnia and Herzegovina",
             "date": "2026-06-12",
             "kickoffUtc": "2026-06-12T18:00:00Z"
         },
@@ -70,7 +70,7 @@
             "matchId": "B-M3",
             "groupId": "B",
             "homeTeam": "Switzerland",
-            "awayTeam": "UEFA Playoff A",
+            "awayTeam": "Bosnia and Herzegovina",
             "date": "2026-06-18",
             "kickoffUtc": "2026-06-18T18:00:00Z"
         },
@@ -94,7 +94,7 @@
             "matchId": "B-M6",
             "groupId": "B",
             "homeTeam": "Qatar",
-            "awayTeam": "UEFA Playoff A",
+            "awayTeam": "Bosnia and Herzegovina",
             "date": "2026-06-24",
             "kickoffUtc": "2026-06-24T21:00:00Z"
         },
@@ -158,14 +158,14 @@
             "matchId": "D-M2",
             "groupId": "D",
             "homeTeam": "Australia",
-            "awayTeam": "UEFA Playoff C",
+            "awayTeam": "Türkiye",
             "date": "2026-06-13",
             "kickoffUtc": "2026-06-13T21:00:00Z"
         },
         {
             "matchId": "D-M3",
             "groupId": "D",
-            "homeTeam": "UEFA Playoff C",
+            "homeTeam": "Türkiye",
             "awayTeam": "United States",
             "date": "2026-06-19",
             "kickoffUtc": "2026-06-19T18:00:00Z"
@@ -181,7 +181,7 @@
         {
             "matchId": "D-M5",
             "groupId": "D",
-            "homeTeam": "UEFA Playoff C",
+            "homeTeam": "Türkiye",
             "awayTeam": "Paraguay",
             "date": "2026-06-24",
             "kickoffUtc": "2026-06-24T18:00:00Z"
@@ -254,7 +254,7 @@
             "matchId": "F-M2",
             "groupId": "F",
             "homeTeam": "Tunisia",
-            "awayTeam": "UEFA Playoff B",
+            "awayTeam": "Sweden",
             "date": "2026-06-14",
             "kickoffUtc": "2026-06-14T21:00:00Z"
         },
@@ -270,7 +270,7 @@
             "matchId": "F-M4",
             "groupId": "F",
             "homeTeam": "Netherlands",
-            "awayTeam": "UEFA Playoff B",
+            "awayTeam": "Sweden",
             "date": "2026-06-20",
             "kickoffUtc": "2026-06-20T21:00:00Z"
         },
@@ -285,7 +285,7 @@
         {
             "matchId": "F-M6",
             "groupId": "F",
-            "homeTeam": "UEFA Playoff B",
+            "homeTeam": "Sweden",
             "awayTeam": "Japan",
             "date": "2026-06-26",
             "kickoffUtc": "2026-06-26T21:00:00Z"
@@ -397,7 +397,7 @@
         {
             "matchId": "I-M2",
             "groupId": "I",
-            "homeTeam": "Intercontinental Playoff 2",
+            "homeTeam": "Iraq",
             "awayTeam": "Norway",
             "date": "2026-06-16",
             "kickoffUtc": "2026-06-16T21:00:00Z"
@@ -406,7 +406,7 @@
             "matchId": "I-M3",
             "groupId": "I",
             "homeTeam": "Senegal",
-            "awayTeam": "Intercontinental Playoff 2",
+            "awayTeam": "Iraq",
             "date": "2026-06-22",
             "kickoffUtc": "2026-06-22T18:00:00Z"
         },
@@ -429,7 +429,7 @@
         {
             "matchId": "I-M6",
             "groupId": "I",
-            "homeTeam": "Intercontinental Playoff 2",
+            "homeTeam": "Iraq",
             "awayTeam": "France",
             "date": "2026-06-26",
             "kickoffUtc": "2026-06-26T21:00:00Z"
@@ -494,7 +494,7 @@
             "matchId": "K-M2",
             "groupId": "K",
             "homeTeam": "Uzbekistan",
-            "awayTeam": "Intercontinental Playoff 1",
+            "awayTeam": "Congo DR",
             "date": "2026-06-17",
             "kickoffUtc": "2026-06-17T21:00:00Z"
         },
@@ -510,14 +510,14 @@
             "matchId": "K-M4",
             "groupId": "K",
             "homeTeam": "Portugal",
-            "awayTeam": "Intercontinental Playoff 1",
+            "awayTeam": "Congo DR",
             "date": "2026-06-23",
             "kickoffUtc": "2026-06-23T21:00:00Z"
         },
         {
             "matchId": "K-M5",
             "groupId": "K",
-            "homeTeam": "Intercontinental Playoff 1",
+            "homeTeam": "Congo DR",
             "awayTeam": "Portugal",
             "date": "2026-06-27",
             "kickoffUtc": "2026-06-27T18:00:00Z"
