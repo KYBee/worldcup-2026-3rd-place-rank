@@ -20,29 +20,33 @@
         "flag": "data/flags/South_Korea.png",
         "fifaRanking": 22
     },
-    "european_playoff_a": {
-        "en": "European Playoff A",
-        "ko": "유럽 플레이오프 A",
-        "code": "PLY",
-        "fifaRanking": 100
+    "bosnia_and_herzegovina": {
+        "en": "Bosnia and Herzegovina",
+        "ko": "보스니아",
+        "code": "BIH",
+        "flag": "data/flags/Bosnia_and_Herzegovina.png",
+        "fifaRanking": 71
     },
-    "european_playoff_b": {
-        "en": "European Playoff B",
-        "ko": "유럽 플레이오프 B",
-        "code": "PLY",
-        "fifaRanking": 100
+    "sweden": {
+        "en": "Sweden",
+        "ko": "스웨덴",
+        "code": "SWE",
+        "flag": "data/flags/Sweden.png",
+        "fifaRanking": 42
     },
-    "european_playoff_c": {
-        "en": "European Playoff C",
-        "ko": "유럽 플레이오프 C",
-        "code": "PLY",
-        "fifaRanking": 100
+    "turkiye": {
+        "en": "Türkiye",
+        "ko": "튀르키예",
+        "code": "TUR",
+        "flag": "data/flags/Turkey.png",
+        "fifaRanking": 25
     },
-    "european_playoff_d": {
-        "en": "European Playoff D",
-        "ko": "유럽 플레이오프 D",
-        "code": "PLY",
-        "fifaRanking": 100
+    "czechia": {
+        "en": "Czechia",
+        "ko": "체코",
+        "code": "CZE",
+        "flag": "data/flags/Czech_Republic.png",
+        "fifaRanking": 43
     },
     "canada": {
         "en": "Canada",
@@ -240,17 +244,19 @@
         "flag": "data/flags/Norway.png",
         "fifaRanking": 32
     },
-    "intercontinental_playoff_1": {
-        "en": "Intercontinental Playoff 1",
-        "ko": "대륙간 플레이오프 1",
-        "code": "PLY",
-        "fifaRanking": 100
+    "congo_dr": {
+        "en": "Congo DR",
+        "ko": "콩고민주공화국",
+        "code": "COD",
+        "flag": "data/flags/DR_Congo.png",
+        "fifaRanking": 46
     },
-    "intercontinental_playoff_2": {
-        "en": "Intercontinental Playoff 2",
-        "ko": "대륙간 플레이오프 2",
-        "code": "PLY",
-        "fifaRanking": 100
+    "iraq": {
+        "en": "Iraq",
+        "ko": "이라크",
+        "code": "IRQ",
+        "flag": "data/flags/Iraq.png",
+        "fifaRanking": 58
     },
     "argentina": {
         "en": "Argentina",
