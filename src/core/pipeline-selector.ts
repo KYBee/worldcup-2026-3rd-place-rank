@@ -1,4 +1,5 @@
 import { recomputeTournamentState, type TournamentComputedState } from "@core/pipeline";
+import { mergeOfficialMatchResults } from "@core/match-results";
 import type { NormalizedDataPack } from "@core/types";
 
 export function createTournamentPipelineSelector(dataPack: NormalizedDataPack) {
@@ -8,7 +9,10 @@ export function createTournamentPipelineSelector(dataPack: NormalizedDataPack) {
 
   return (results: Record<string, { home: number; away: number }>): TournamentComputedState => {
     if (!initialized || prevResults !== results || !prevComputed) {
-      prevComputed = recomputeTournamentState(dataPack, results);
+      prevComputed = recomputeTournamentState(
+        dataPack,
+        mergeOfficialMatchResults(dataPack, results)
+      );
       prevResults = results;
       initialized = true;
     }

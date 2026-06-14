@@ -72,6 +72,8 @@ function normalizeFixtures(
       awayTeamId,
       date: fixture.date,
       kickoffUtc: fixture.kickoffUtc,
+      homeScore: fixture.homeScore,
+      awayScore: fixture.awayScore,
     };
   });
 }

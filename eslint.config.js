@@ -22,4 +22,12 @@ export default [
       "no-console": "off",
     },
   },
+  {
+    files: ["worker/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+      },
+    },
+  },
 ];

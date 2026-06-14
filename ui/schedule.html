@@ -1,232 +1,250 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>킹우의수 | 스케줄</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        .match-card {
-            display: grid;
-            grid-template-columns: 100px 1fr 100px;
-            align-items: center;
-            padding: 24px;
-            width: 100%;
-        }
+      .match-card {
+        display: grid;
+        grid-template-columns: 100px 1fr 100px;
+        align-items: center;
+        padding: 24px;
+        width: 100%;
+      }
 
+      .match-time {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: 768px) {
         .match-time {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.1rem;
+          font-size: 0.9rem;
         }
+      }
 
-        @media (max-width: 768px) {
-            .match-time {
-                font-size: 0.9rem;
-            }
+      .match-teams {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+
+      .team-vs {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex: 1;
+        white-space: nowrap;
+      }
+
+      .team-vs.home {
+        justify-content: flex-end;
+        text-align: right;
+      }
+
+      .team-vs.away {
+        justify-content: flex-start;
+        text-align: left;
+      }
+
+      .vs-label {
+        color: var(--text-dim);
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        font-weight: 900;
+        opacity: 0.2;
+        width: 40px;
+        text-align: center;
+      }
+
+      .score-result {
+        color: var(--primary);
+        font-size: 1rem;
+        letter-spacing: 0;
+        opacity: 1;
+        white-space: nowrap;
+      }
+
+      .match-card.final {
+        border-color: rgba(0, 204, 102, 0.45);
+        background: rgba(0, 204, 102, 0.08);
+      }
+
+      .venue {
+        text-align: right;
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        opacity: 0.6;
+      }
+
+      .filter-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+        width: 100%;
+      }
+
+      .filter-select {
+        width: 100%;
+        background: var(--bg-card);
+        border: 1px solid var(--border-glass);
+        border-radius: 10px;
+        padding: 12px 14px;
+        color: white;
+        font-size: 0.95rem;
+        font-family: inherit;
+      }
+
+      .filter-select:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 12px var(--primary-glow);
+      }
+
+      @media (max-width: 768px) {
+        .match-card {
+          grid-template-columns: 65px 1fr 50px;
+          text-align: middle;
+          gap: 8px;
+          padding: 14px 10px;
+          border-radius: 12px;
         }
 
         .match-teams {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 25px;
-            font-size: 1.15rem;
-            font-weight: 700;
+          gap: 8px;
         }
 
         .team-vs {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-            white-space: nowrap;
+          gap: 6px;
+          font-size: 0.85rem;
         }
 
-        .team-vs.home {
-            justify-content: flex-end;
-            text-align: right;
-        }
-
-        .team-vs.away {
-            justify-content: flex-start;
-            text-align: left;
+        .team-vs span {
+          max-width: 65px;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .vs-label {
-            color: var(--text-dim);
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            font-weight: 900;
-            opacity: 0.2;
-            width: 40px;
-            text-align: center;
+          width: 20px;
+          font-size: 0.6rem;
         }
 
         .venue {
-            text-align: right;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            opacity: 0.6;
+          font-size: 0.75rem;
+          border-top: none;
+          padding-top: 0;
+          text-align: right;
         }
+      }
 
-        .filter-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 24px;
-            width: 100%;
-        }
-
-        .filter-select {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-glass);
-            border-radius: 10px;
-            padding: 12px 14px;
-            color: white;
-            font-size: 0.95rem;
-            font-family: inherit;
-        }
-
-        .filter-select:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 12px var(--primary-glow);
-        }
-
-        @media (max-width: 768px) {
-            .match-card {
-                grid-template-columns: 65px 1fr 50px;
-                text-align: middle;
-                gap: 8px;
-                padding: 14px 10px;
-                border-radius: 12px;
-            }
-
-            .match-teams {
-                gap: 8px;
-            }
-
-            .team-vs {
-                gap: 6px;
-                font-size: 0.85rem;
-            }
-
-            .team-vs span {
-                max-width: 65px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .vs-label {
-                width: 20px;
-                font-size: 0.6rem;
-            }
-
-            .venue {
-                font-size: 0.75rem;
-                border-top: none;
-                padding-top: 0;
-                text-align: right;
-            }
-        }
-
-        .filter-row {
-            grid-template-columns: 1fr;
-        }
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <header>
-        <div class="logo-container">
-            <a href="simulator.html" class="logo">킹우의수</a>
-        </div>
-        <nav>
-            <a href="simulator.html">시뮬레이터</a>
-            <a href="groups.html">조별순위</a>
-            <a href="schedule.html" class="active">스케줄</a>
-        </nav>
+      <div class="logo-container">
+        <a href="simulator.html" class="logo">킹우의수</a>
+      </div>
+      <nav>
+        <a href="simulator.html">시뮬레이터</a>
+        <a href="groups.html">조별순위</a>
+        <a href="schedule.html" class="active">스케줄</a>
+      </nav>
     </header>
 
     <main class="app-container">
-        <header-section class="animate">
-            <h1>전체 경기 일정</h1>
-            <p class="subtitle">FIFA World Cup 2026 조별리그 전체 일정입니다.</p>
-        </header-section>
+      <header-section class="animate">
+        <h1>전체 경기 일정</h1>
+        <p class="subtitle">FIFA World Cup 2026 조별리그 전체 일정입니다.</p>
+      </header-section>
 
-        <div class="filter-row animate delay-1">
-            <select id="schedule-group-filter" class="filter-select">
-                <option value="">전체 조</option>
-            </select>
-        </div>
+      <div class="filter-row animate delay-1">
+        <select id="schedule-group-filter" class="filter-select">
+          <option value="">전체 조</option>
+        </select>
+      </div>
 
-        <div id="schedule-list" class="animate delay-2" style="width: 100%;">
-            <div style="text-align: center; padding: 50px; opacity: 0.5;">일정을 불러오는 중...</div>
-        </div>
+      <div id="schedule-list" class="animate delay-2" style="width: 100%">
+        <div style="text-align: center; padding: 50px; opacity: 0.5">일정을 불러오는 중...</div>
+      </div>
     </main>
 
     <script type="module">
-        import {
-            getTeamCode,
-            getTeamFlag,
-            getTeamLabel,
-            loadTournamentData
-        } from "./app-core.js";
+      import {
+        getTeamCode,
+        getTeamFlag,
+        getTeamLabel,
+        loadTournamentData,
+        readOfficialScores,
+      } from "./app-core.js";
 
-        const scheduleList = document.getElementById("schedule-list");
-        const groupFilter = document.getElementById("schedule-group-filter");
+      const scheduleList = document.getElementById("schedule-list");
+      const groupFilter = document.getElementById("schedule-group-filter");
 
-        let data = null;
+      let data = null;
+      let officialScores = {};
 
-        function formatDate(dateStr) {
-            const date = new Date(dateStr + "T00:00:00");
-            return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}.`;
+      function formatDate(dateStr) {
+        const date = new Date(dateStr + "T00:00:00");
+        return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}.`;
+      }
+
+      function formatTime(kickoffUtc) {
+        if (!kickoffUtc) return "-";
+        const date = new Date(kickoffUtc);
+        const hours = date.getHours();
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? "PM" : "AM";
+        const displayHours = hours % 12 || 12;
+        return `${ampm} ${displayHours}:${minutes}`;
+      }
+
+      function renderSchedule(fixtures) {
+        scheduleList.innerHTML = "";
+        if (fixtures.length === 0) {
+          scheduleList.innerHTML =
+            '<div style="text-align: center; padding: 50px; opacity: 0.5;">검색 결과가 없습니다.</div>';
+          return;
         }
 
-        function formatTime(kickoffUtc) {
-            if (!kickoffUtc) return "-";
-            const date = new Date(kickoffUtc);
-            const hours = date.getHours();
-            const minutes = String(date.getMinutes()).padStart(2, "0");
-            const ampm = hours >= 12 ? "PM" : "AM";
-            const displayHours = hours % 12 || 12;
-            return `${ampm} ${displayHours}:${minutes}`;
-        }
+        let lastDate = "";
+        fixtures.forEach((fixture) => {
+          const dateHeader = formatDate(fixture.date);
+          if (dateHeader !== lastDate) {
+            const sep = document.createElement("div");
+            sep.className = "date-separator";
+            sep.innerText = dateHeader;
+            scheduleList.appendChild(sep);
+            lastDate = dateHeader;
+          }
 
-        function renderSchedule(fixtures) {
-            scheduleList.innerHTML = "";
-            if (fixtures.length === 0) {
-                scheduleList.innerHTML =
-                    '<div style="text-align: center; padding: 50px; opacity: 0.5;">검색 결과가 없습니다.</div>';
-                return;
-            }
+          const homeLabel = getTeamLabel(fixture.homeTeamId, data.teams);
+          const awayLabel = getTeamLabel(fixture.awayTeamId, data.teams);
+          const homeCode = getTeamCode(fixture.homeTeamId, data.teams);
+          const awayCode = getTeamCode(fixture.awayTeamId, data.teams);
+          const homeFlag = getTeamFlag(fixture.homeTeamId, data.teams);
+          const awayFlag = getTeamFlag(fixture.awayTeamId, data.teams);
+          const timeStr = formatTime(fixture.kickoffUtc);
+          const officialScore = officialScores[fixture.matchId];
+          const middleLabel = officialScore
+            ? `${officialScore.home} - ${officialScore.away}`
+            : "VS";
 
-            let lastDate = "";
-            fixtures.forEach((fixture) => {
-                const dateHeader = formatDate(fixture.date);
-                if (dateHeader !== lastDate) {
-                    const sep = document.createElement("div");
-                    sep.className = "date-separator";
-                    sep.innerText = dateHeader;
-                    scheduleList.appendChild(sep);
-                    lastDate = dateHeader;
-                }
-
-                const homeLabel = getTeamLabel(fixture.homeTeamId, data.teams);
-                const awayLabel = getTeamLabel(fixture.awayTeamId, data.teams);
-                const homeCode = getTeamCode(fixture.homeTeamId, data.teams);
-                const awayCode = getTeamCode(fixture.awayTeamId, data.teams);
-                const homeFlag = getTeamFlag(fixture.homeTeamId, data.teams);
-                const awayFlag = getTeamFlag(fixture.awayTeamId, data.teams);
-                const timeStr = formatTime(fixture.kickoffUtc);
-
-                const card = document.createElement("div");
-                card.className = "glass-card match-card";
-                card.innerHTML = `
+          const card = document.createElement("div");
+          card.className = `glass-card match-card${officialScore ? " final" : ""}`;
+          card.innerHTML = `
                     <div class="match-time">${timeStr}</div>
                     <div class="match-teams">
                         <div class="team-vs home">
@@ -234,7 +252,7 @@
                             <span class="mobile-only" style="font-weight:800;">${homeCode}</span>
                             ${homeFlag ? `<img class="flag" src="${homeFlag}" alt="">` : `<div class="flag"></div>`}
                         </div>
-                        <div class="vs-label">VS</div>
+                        <div class="vs-label${officialScore ? " score-result" : ""}">${middleLabel}</div>
                         <div class="team-vs away">
                             ${awayFlag ? `<img class="flag" src="${awayFlag}" alt="">` : `<div class="flag"></div>`}
                             <span class="desktop-only">${awayLabel}</span>
@@ -243,44 +261,43 @@
                     </div>
                     <div class="venue">${fixture.groupId}조</div>
                 `;
-                scheduleList.appendChild(card);
-            });
+          scheduleList.appendChild(card);
+        });
+      }
+
+      function applyFilters() {
+        const groupId = groupFilter.value || "";
+        const filtered = data.fixtures
+          .filter((fixture) => !groupId || fixture.groupId === groupId)
+          .sort((a, b) => (a.kickoffUtc || "").localeCompare(b.kickoffUtc || ""));
+
+        renderSchedule(filtered);
+      }
+
+      function initFilters() {
+        const groups = [...new Set(data.groups.map((group) => group.groupId))].sort();
+        groups.forEach((groupId) => {
+          const option = document.createElement("option");
+          option.value = groupId;
+          option.textContent = `${groupId}조`;
+          groupFilter.appendChild(option);
+        });
+      }
+
+      async function init() {
+        try {
+          data = await loadTournamentData();
+          officialScores = readOfficialScores(data);
+          initFilters();
+          applyFilters();
+
+          groupFilter.addEventListener("change", applyFilters);
+        } catch (error) {
+          scheduleList.innerHTML = `<div style="text-align: center; color:#ff7777; padding:50px;">일정 로딩 실패: ${error.message}</div>`;
         }
+      }
 
-        function applyFilters() {
-            const groupId = groupFilter.value || "";
-            const filtered = data.fixtures
-                .filter((fixture) => !groupId || fixture.groupId === groupId)
-                .sort((a, b) => (a.kickoffUtc || "").localeCompare(b.kickoffUtc || ""));
-
-            renderSchedule(filtered);
-        }
-
-        function initFilters() {
-            const groups = [...new Set(data.groups.map((group) => group.groupId))].sort();
-            groups.forEach((groupId) => {
-                const option = document.createElement("option");
-                option.value = groupId;
-                option.textContent = `${groupId}조`;
-                groupFilter.appendChild(option);
-            });
-        }
-
-        async function init() {
-            try {
-                data = await loadTournamentData();
-                initFilters();
-                applyFilters();
-
-                groupFilter.addEventListener("change", applyFilters);
-            } catch (error) {
-                scheduleList.innerHTML =
-                    `<div style="text-align: center; color:#ff7777; padding:50px;">일정 로딩 실패: ${error.message}</div>`;
-            }
-        }
-
-        init();
+      init();
     </script>
-</body>
-
+  </body>
 </html>

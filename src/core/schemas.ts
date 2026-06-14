@@ -36,13 +36,17 @@ function isGroupEntry(value: unknown): value is GroupEntry {
 
 function isFixture(value: unknown): value is Fixture {
   if (!isObject(value)) return false;
+  const hasHomeScore = value.homeScore !== undefined;
+  const hasAwayScore = value.awayScore !== undefined;
+  const hasScorePair = hasHomeScore || hasAwayScore;
   return (
     isString(value.matchId) &&
     isString(value.groupId) &&
     isString(value.homeTeam) &&
     isString(value.awayTeam) &&
     isString(value.date) &&
-    isString(value.kickoffUtc)
+    isString(value.kickoffUtc) &&
+    (!hasScorePair || (isNumber(value.homeScore) && isNumber(value.awayScore)))
   );
 }
 

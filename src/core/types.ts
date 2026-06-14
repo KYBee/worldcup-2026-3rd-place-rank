@@ -30,6 +30,8 @@ export type Fixture = {
   awayTeam: string;
   date: string;
   kickoffUtc: string;
+  homeScore?: number;
+  awayScore?: number;
 };
 
 export type ScheduleData = {
@@ -75,6 +77,8 @@ export type NormalizedFixture = {
   awayTeamId: TeamId;
   date: string;
   kickoffUtc: string;
+  homeScore?: number;
+  awayScore?: number;
 };
 
 export type NormalizedDataPack = {
